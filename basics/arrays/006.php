@@ -1,3 +1,4 @@
+<?php
 //Write a program to play a word-guessing game like Hangman.
 //
 //It must randomly choose a word from a list of words.
@@ -6,98 +7,99 @@
 //It must display letters they have already guessed (either only the incorrect guesses or all guesses).
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //
-//Word:    _ _ _ _ _ _ _ _ _
+//Word:	_ _ _ _ _ _ _ _ _
 //
 //Misses:
 //
-//Guess:    e
+//Guess:	e
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //
-//Word:    _ e _ _ _ _ _ _ _
+//Word:	_ e _ _ _ _ _ _ _
 //
 //Misses:
 //
-//Guess:    i
+//Guess:	i
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //
-//Word:    _ e _ i _ _ _ _ _
+//Word:	_ e _ i _ _ _ _ _
 //
 //Misses:
 //
-//Guess:    a
+//Guess:	a
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //
-//Word:    _ e _ i a _ _ a _
+//Word:	_ e _ i a _ _ a _
 //
 //Misses:
 //
-//Guess:    r
+//Guess:	r
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //
-//Word:    _ e _ i a _ _ a _
+//Word:	_ e _ i a _ _ a _
 //
-//Misses:    r
+//Misses:	r
 //
-//Guess:    s
-//
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//
-//Word:    _ e _ i a _ _ a _
-//
-//Misses:    rs
-//
-//Guess:    t
+//Guess:	s
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //
-//Word:    _ e _ i a t _ a _
+//Word:	_ e _ i a _ _ a _
 //
-//Misses:    rs
+//Misses:	rs
 //
-//Guess:    n
-//
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//
-//Word:    _ e _ i a t _ a n
-//
-//Misses:    rs
-//
-//Guess:    o
+//Guess:	t
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //
-//Word:    _ e _ i a t _ a n
+//Word:	_ e _ i a t _ a _
 //
-//Misses:    rso
+//Misses:	rs
 //
-//Guess:    l
-//
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//
-//Word:    l e _ i a t _ a n
-//
-//Misses:    rso
-//
-//Guess:    v
+//Guess:	n
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //
-//Word:    l e v i a t _ a n
+//Word:	_ e _ i a t _ a n
 //
-//Misses:    rso
+//Misses:	rs
 //
-//Guess:    h
+//Guess:	o
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //
-//Word:    l e v i a t h a n
+//Word:	_ e _ i a t _ a n
 //
-//Misses:    rso
+//Misses:	rso
+//
+//Guess:	l
+//
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//
+//Word:	l e _ i a t _ a n
+//
+//Misses:	rso
+//
+//Guess:	v
+//
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//
+//Word:	l e v i a t _ a n
+//
+//Misses:	rso
+//
+//Guess:	h
+//
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//
+//Word:	l e v i a t h a n
+//
+//Misses:	rso
 //
 //YOU GOT IT!
 //
 //Play "again" or "quit"? quit
+

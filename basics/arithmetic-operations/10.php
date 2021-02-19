@@ -33,7 +33,7 @@ class Geometry
     }
 
 
-   static function circleArea(float $radius): float
+    static function circleArea(float $radius): float
     {
         return pi() * pow($radius, 2);
     }

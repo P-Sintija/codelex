@@ -11,9 +11,8 @@ echo "Enter the value to search for: ";
 
 $userValue = readline("");
 
-function checkValue(string $input): bool
+function checkValue(array $numbers, string $input): bool
 {
-    global $numbers;
     $identical = false;
     for ($i = 0; $i < count($numbers); $i++) {
         if ($numbers[$i] == $input) {
@@ -23,7 +22,7 @@ function checkValue(string $input): bool
     return $identical;
 }
 
-if (checkValue($userValue)) {
+if (checkValue($numbers,$userValue)) {
     echo "Array contains user value";
 } else {
     echo "Array does not contain user value";

@@ -28,9 +28,8 @@ if (!validate($numberOfLines)) {
 }
 
 
-function getAllIntegers(int $input): array
+function getAllIntegers(int $numbersPerLine, int $input): array
 {
-    global $numbersPerLine;
     $storage = [];
     for ($i = 1; $i <= $input * $numbersPerLine; $i++) {
         $storage[] = $i;
@@ -38,11 +37,10 @@ function getAllIntegers(int $input): array
     return $storage;
 }
 
-$line = getAllIntegers($numberOfLines);
+$line = getAllIntegers($numbersPerLine, $numberOfLines);
 
-function makeArray(array $input, int $numberOfLines): array
+function makeArray(array $input,int $numbersPerLine, int $numberOfLines): array
 {
-    global $numbersPerLine;
     $storage = [];
     for ($i = 0; $i < $numberOfLines; $i++) {
         $storage[$i] = array_slice($input, ($i * $numbersPerLine), $numbersPerLine);
@@ -50,7 +48,7 @@ function makeArray(array $input, int $numberOfLines): array
     return $storage;
 }
 
-$arrayOfIntegers = makeArray($line, $numberOfLines);
+$arrayOfIntegers = makeArray($line, $numbersPerLine, $numberOfLines);
 
 
 function renameIntegers(array $list): array

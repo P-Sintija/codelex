@@ -1,17 +1,17 @@
 <?php
-
+/*
 function display_board()
 {
-    echo "   |   |   \n";
-    echo "---+---+---\n";
-    echo "   |   |   \n";
-    echo "---+---+---\n";
-    echo "   |   |   \n";
+    echo "   |   |   " . PHP_EOL;
+    echo "---+---+---" . PHP_EOL;
+    echo "   |   |   " . PHP_EOL;
+    echo "---+---+---" . PHP_EOL;
+    echo "   |   |   " . PHP_EOL;
 }
 
 
 display_board();
-
+*/
 //See tic-tac-toe.php
 //
 //Code an interactive, two-player game of Tic-Tac-Toe. You'll use a two-dimensional array of chars.
@@ -35,3 +35,27 @@ display_board();
 //	X X O
 //
 //The game is a tie.
+
+function createGrid(): array
+{
+    $rows = array_fill(0, 3, " ");
+    return array_fill(0, 3, $rows);
+}
+
+$grid = createGrid();
+
+
+function drawGrid($grid): string
+{
+    return $gridString = implode(PHP_EOL, array_map(function ($cell) {
+            return implode(" ", $cell);
+        }, $grid)) . PHP_EOL;
+}
+
+echo drawGrid($grid);
+
+$possibleMoves = 9;
+
+while($possibleMoves > 0) {
+
+}
