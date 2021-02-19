@@ -9,7 +9,11 @@
 //x - Initial position = 0
 //Note: The correct value is -490.5m.
 
+$acceleration = -9.81;
+$time = 10;
+$velocity = 0;
+$position = 0;
 
-
-
+$newPosition = 0.5 * $acceleration * pow($time, 2) + $velocity + $position;
+echo $newPosition . " m";
 
