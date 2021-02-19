@@ -103,3 +103,47 @@
 //
 //Play "again" or "quit"? quit
 
+$gameWords = [
+    "difference",
+    "awesome",
+    "something",
+    "game"
+];
+
+$word = $gameWords[rand(0, count($gameWords) - 1)];
+
+$guessedLetters = array_fill(0, strlen($word), "_");
+$misses = [];
+
+$limitedTries = strlen($word) + 5;
+
+
+while ($limitedTries > 0) {
+    $limitedTries = $limitedTries - 1;
+    $guess = readline("Enter your guess : ");
+    for ($i = 0; $i < strlen($word); $i++) {
+        if ($guess === $word[$i]) {
+            $guessedLetters[$i] = $guess;
+        }
+    }
+
+    if ($word[0] !== $guess && !strpos($word, $guess)) {
+        $misses[] = $guess;
+    }
+
+    echo "Guesses left : " . $limitedTries . PHP_EOL;
+    echo "Word : " . implode(" ", $guessedLetters) . PHP_EOL;
+    echo "Misses : " . implode(" ", $misses) . PHP_EOL;
+    echo "Guess : " . $guess . PHP_EOL;
+
+    if (!in_array("_", $guessedLetters)) {
+        echo "YOU GOT IT!!!";
+        $limitedTries = 0;
+    }
+
+    if ($limitedTries === 0) {
+        exit();
+    }
+
+
+}
