@@ -1,20 +1,31 @@
 <?php
-$animalsArray = ["sheep", "sheep", "sheep", "wolf", "sheep", "wolf", "sheep", "sheep"];
 
+$animalsArray = [];
 
-for ($i = 0; $i < count($animalsArray); $i++) {
-
-    if ($animalsArray[$i] === "wolf") {
-        echo "HERE" . PHP_EOL;
-        continue;
+function findWolf(array $animals): array
+{
+    $herd = [];
+    for ($i = 0; $i < count($animals); $i++) {
+        if ($animals[$i] === "wolf") {
+            $herd[] = "HERE";
+            continue;
+        }
+        if ((isset($animals[$i - 1]) && $animals[$i - 1] === "wolf") || (isset($animals[$i + 1]) && $animals[$i + 1] === "wolf")) {
+            $herd[] = "OMG";
+            continue;
+        }
+        $herd[] = "happy";
     }
-    if ((isset($animalsArray[$i - 1]) && $animalsArray[$i - 1] === "wolf") || (isset($animalsArray[$i + 1]) && $animalsArray[$i + 1] === "wolf")) {
-        echo "OMG" . PHP_EOL;
-        continue;
-    }
-    echo "happy" . PHP_EOL;
+    return $herd;
 }
 
-
-
+while (true) {
+    $animal = readline("Enter animal (sheep/wolf) : ");
+    $animalsArray[] = $animal;
+    $end = strtoupper(readline("To find wolf press N : "));
+    if ($end === "N") {
+        echo implode(",", findWolf($animalsArray));
+        exit();
+    }
+}
 
