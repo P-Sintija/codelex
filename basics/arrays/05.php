@@ -37,13 +37,6 @@ display_board();
 //The game is a tie.
 
 
-
-
-////////// nepareizi ievadot, neatgriež vusu atpakaļ, jāizveido recursion funkcija
-///////// nedrīkst ielikt jau aiņemtā laukā
-
-
-
 function createGrid(): array
 {
     $rows = array_fill(0, 3, " ");
@@ -51,7 +44,45 @@ function createGrid(): array
 }
 
 $grid = createGrid();
+$xMoves = [];
+$oMoves = [];
+$possibleMoves = 9;
 
+
+function determineTurn(int $count): string
+{
+    if ($count % 2 !== 0) {
+        return $turn = "X";
+    } else {
+        return $turn = "O";
+    }
+}
+
+function askCoordinates(string $turn): string
+{
+    if ($turn === "X") {
+        return $turn = readline("'X', choose your location (row, column): ");
+    } else {
+        return $turn = readline("'O', choose your location (row, column): ");
+    }
+}
+
+function validate(string $playerInput, array $grid): bool
+{
+    $length = strlen($playerInput);
+    return $length > 1 && $length < 3 &&
+        is_numeric($playerInput) &&
+        $playerInput[0] < 3 && $playerInput[1] < 3 &&
+        $grid[$playerInput[0]][$playerInput[1]] === " ";
+}
+
+function fillGrid(array &$grid, array $Input, string $turn): array
+{
+    for ($i = 0; $i < count($Input); $i++) {
+        $grid[$Input[$i][0]][$Input[$i][1]] = $turn;
+    }
+    return $grid;
+}
 
 function drawGrid(array $grid): string
 {
@@ -60,30 +91,17 @@ function drawGrid(array $grid): string
         }, $grid)) . PHP_EOL;
 }
 
-function fillGrid(array &$grid, array $xInput, array $oInput): array
+function moveX(array &$moves, string $coordinates): array
 {
-    for ($i = 0; $i < count($xInput); $i++) {
-        for ($j = 0; $j < count($oInput); $j++) {
-            $grid[$xInput[$i][0]][$xInput[$i][1]] = "X";
-            $grid[$oInput[$j][0]][$oInput[$j][1]] = "O";
-        }
-    }
-    return $grid;
+    $moves[] = $coordinates;
+    return $moves;
 }
 
-
-$xMoves = [];
-$oMoves = [];
-
-function validate(string $playerInput)
+function moveO(array &$moves, string $coordinates): array
 {
-    $length = strlen($playerInput);
-
-    return $length > 1 && $length < 3 &&
-        is_numeric($playerInput) &&
-        $playerInput[0] < 3 && $playerInput[1] < 3;
+    $moves[] = $coordinates;
+    return $moves;
 }
-
 
 function winner(array $grid): string
 {
@@ -103,41 +121,42 @@ function winner(array $grid): string
 }
 
 
-$possibleMoves = 9;
-
 while ($possibleMoves > 0) {
-    $possibleMoves = $possibleMoves - 1;
-    if ($possibleMoves % 2 === 0) {
-        $move = readline("'X', choose your location (row, column): ");
-        if (validate($move)) {
-            $xMoves[] = $move;
-            fillGrid($grid, $xMoves, $oMoves);
-            echo PHP_EOL . drawGrid($grid) . PHP_EOL;
-        } else {
-            echo "Something went wrong: enter an integer or the place is not free" . PHP_EOL;
-            $move = readline("'X', choose your location (row, column): ");
-        }
-    } else if ($possibleMoves % 2 !== 0) {
-        $move = readline("'O', choose your location (row, column): ");
-        if (validate($move)) {
-            $oMoves[] = $move;
-            fillGrid($grid, $xMoves, $oMoves);
-            echo PHP_EOL . drawGrid($grid) . PHP_EOL;
-        } else {
-            echo "Something went wrong: enter an integer or the place is not free" . PHP_EOL;
-            $move = readline("'O', choose your location (row, column): ");
-        }
-    }
 
-
-        if (strlen(winner($grid)) > 0) {
-            echo "Winner" . winner($grid) . PHP_EOL;
-            exit();
-        }
-
-    }
-
-    if ($possibleMoves === 0) {
-        echo "IT`S A TIE!! ";
+    if (strlen(winner($grid)) > 0) {
+        echo "Winner " . winner($grid) . PHP_EOL;
         exit();
     }
+
+    $turn = determineTurn($possibleMoves);
+    $coordinates = askCoordinates($turn);
+
+    if (validate($coordinates, $grid)) {
+        if ($turn === "X") {
+            moveX($xMoves, $coordinates);
+        } else {
+            moveO($oMoves, $coordinates);
+        }
+
+        $possibleMoves = $possibleMoves - 1;
+
+        fillGrid($grid, $xMoves, "X");
+        fillGrid($grid, $oMoves, "O");
+
+        echo PHP_EOL . drawGrid($grid) . PHP_EOL;
+    } else {
+        echo PHP_EOL . "Something went wrong: enter an integer or the place is not free" . PHP_EOL;
+    }
+
+}
+
+
+if (strlen(winner($grid)) > 0) {
+    echo "Winner " . winner($grid) . PHP_EOL;
+    exit();
+} else if ($possibleMoves === 0) {
+    echo "IT`S A TIE!! ";
+    exit();
+}
+
+

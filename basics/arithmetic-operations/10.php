@@ -61,36 +61,41 @@ echo "4. Quit" . PHP_EOL;
 echo PHP_EOL;
 
 
-$choice = readline("Enter your choice (1-4) : ");
+while (true) {
 
+    $choice = readline("Enter your choice (1-4) : ");
 
-if ($choice == 1) {
-    $radius = readline("Enter radius (cm) : ");
-    if ($areaCalculator->validate($radius)) {
-        echo "Circle Area is " . number_format($areaCalculator->circleArea($radius), 2) . " cm2";
+    if ($choice == 1) {
+        $radius = readline("Enter radius (cm) : ");
+        if ($areaCalculator->validate($radius)) {
+            echo "Circle Area is " . number_format($areaCalculator->circleArea($radius), 2) . " cm2" . PHP_EOL;
+            echo PHP_EOL;
+        } else {
+            echo "Please enter a numeric value " . PHP_EOL;
+        }
+    } else if ($choice == 2) {
+        $length = readline("Enter length (cm) : ");
+        $width = readline("Enter width (cm) : ");
+        if ($areaCalculator->validate($length) && $areaCalculator->validate($width)) {
+            echo "Rectangle Area is " . number_format($areaCalculator->rectangleArea($length, $width), 2) . " cm2" . PHP_EOL;
+            echo PHP_EOL;
+        } else {
+            echo "Please enter a numeric value" . PHP_EOL;
+        }
+    } else if ($choice == 3) {
+        $base = readline("Enter base (cm) : ");
+        $height = readline("Enter height (cm) :");
+        if ($areaCalculator->validate($base) && $areaCalculator->validate($height)) {
+            echo "Triangle Area is " . number_format($areaCalculator->triangleArea($base, $height), 2) . " cm2" . PHP_EOL;
+            echo PHP_EOL;
+        } else {
+            echo "Please enter a numeric value" . PHP_EOL;
+        }
+    } else if ($choice == 4) {
+        exit();
     } else {
-        echo "Please enter a numeric value";
+        echo "Error!" . PHP_EOL;
     }
-} else if ($choice == 2) {
-    $length = readline("Enter length (cm) : ");
-    $width = readline("Enter width (cm) : ");
-    if ($areaCalculator->validate($length) && $areaCalculator->validate($width)) {
-        echo "Rectangle Area is " . number_format($areaCalculator->rectangleArea($length, $width), 2) . " cm2";
-    } else {
-        echo "Please enter a numeric value";
-    }
-} else if ($choice == 3) {
-    $base = readline("Enter base (cm) : ");
-    $height = readline("Enter height (cm) :");
-    if ($areaCalculator->validate($base) && $areaCalculator->validate($height)) {
-        echo "Triangle Area is " . number_format($areaCalculator->triangleArea($base, $height), 2) . " cm2";
-    } else {
-        echo "Please enter a numeric value";
-    }
-} else if ($choice == 4) {
-    exit();
-} else {
-    echo "Error!";
 }
 
 

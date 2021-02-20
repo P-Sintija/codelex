@@ -36,3 +36,4 @@ $allNumbers = createArray($lowerBound, $upperBound);
 
 echo "The sum of $lowerBound to $upperBound is " . array_sum($allNumbers) . PHP_EOL;
 echo "The average is " . array_sum($allNumbers) / count($allNumbers);
+

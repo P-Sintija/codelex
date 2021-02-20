@@ -16,7 +16,6 @@ if (!validate($number)) {
     exit();
 }
 
-
 $storage = [];
 
 for ($i = 1; $i <= $number; $i++) {

@@ -12,22 +12,23 @@
 $personsWeight = readline("Enter weight(kg) : ");
 $personsHeight = readline("Enter height(m) : ");
 
-$convertInCm = $personsHeight * 100;
-
-
 if (!is_numeric($personsWeight) || !is_numeric($personsWeight)) {
     echo "Wrong input, please enter numbers";
     exit();
 }
 
-$BMIMetric = $personsWeight / (pow($convertInCm, 2) / 10000);
+$BMIMetric = $personsWeight / pow($personsHeight, 2);
 
 echo "BMI is = " . number_format($BMIMetric, 3,) . PHP_EOL;
 
 if ($BMIMetric >= 18.5 && $BMIMetric <= 25) {
     echo "Weight is optimal.";
+    exit();
 } else if ($BMIMetric < 18.5) {
     echo "underweight";
+    exit();
 } else {
     echo "overweight";
+    exit();
 }
+

@@ -1,4 +1,4 @@
-<?php //declare(strict_types=1); ????
+<?php
 //Write a program to accept two integers and return true if the either one is 15 or if their sum or difference is 15.
 
 
@@ -7,11 +7,13 @@ $secondInteger = readline(" Enter second integer : ");
 
 function validate(string $input): bool
 {
-    return is_numeric($input);
+    $valueInteger = (int)$input;
+    $valueFloat = (float)$input;
+    return is_numeric($input) && $valueInteger == $valueFloat;
 }
 
 if (!validate($firstInteger) || !validate($secondInteger)) {
-    echo "Not a integer";
+    echo "Not an integer";
     exit();
 }
 

@@ -26,6 +26,7 @@ class Employee
     const maximumWorkingHours = 60;
     const maximumNormalHours = 40;
     const overtimePayment = 1.5;
+
     public function __construct($basePay, $hoursWorked)
     {
         $this->basePay = $basePay;
@@ -53,7 +54,7 @@ class Employee
         return $payment;
     }
 
-    function overtimePayment($input): float
+    function overtimePayment(int $input): float
     {
         return $input * $this->basePay * self::overtimePayment;
     }

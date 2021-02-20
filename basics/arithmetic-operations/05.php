@@ -28,7 +28,7 @@ function validate(string $input): bool
 }
 
 if (!validate($guess)) {
-    echo "Try again and input a integer" . PHP_EOL;
+    echo "Try again and input an integer" . PHP_EOL;
     $guess = readline("Guess a number between 1-100 : ");
 }
 
@@ -37,6 +37,8 @@ if ($numberToGuess == $guess) {
     echo "You got it right!";
 } else if ($numberToGuess < $guess) {
     echo "Sorry, you are too high. The number was $numberToGuess .";
+    exit();
 } else {
     echo "Sorry, you are too low. The number was $numberToGuess .";
+    exit();
 }

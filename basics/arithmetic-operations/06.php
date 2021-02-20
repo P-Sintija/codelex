@@ -23,12 +23,12 @@ function validate(string $input): bool
 }
 
 if (!validate($numberOfLines)) {
-    echo "Numbers of lines must be an integer" . PHP_EOL;
+    echo "Number of lines must be an integer" . PHP_EOL;
     exit();
 }
 
 
-function getAllIntegers(int $numbersPerLine, int $input): array
+function getAllIntegers(int $numbersPerLine, string $input): array
 {
     $storage = [];
     for ($i = 1; $i <= $input * $numbersPerLine; $i++) {
@@ -39,7 +39,7 @@ function getAllIntegers(int $numbersPerLine, int $input): array
 
 $line = getAllIntegers($numbersPerLine, $numberOfLines);
 
-function makeArray(array $input,int $numbersPerLine, int $numberOfLines): array
+function makeArray(array $input, int $numbersPerLine, string $numberOfLines): array
 {
     $storage = [];
     for ($i = 0; $i < $numberOfLines; $i++) {
