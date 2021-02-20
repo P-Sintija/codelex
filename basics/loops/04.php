@@ -61,12 +61,12 @@ class FizzBuzz
         return $integers;
     }
 
-    function printFizzBuzz($reFizzBuzz): string
+    function printFizzBuzz(array $reFizzBuzz): string
     {
-
-
+        return implode(PHP_EOL, array_map(function ($digits) {
+            return implode(" ", $digits);
+        }, $reFizzBuzz));
     }
-
 
 
 }
@@ -74,10 +74,9 @@ class FizzBuzz
 
 $fizzBuzz = new FizzBuzz();
 $integers = $fizzBuzz->inputIntegers($fizzBuzz->input);
-$distributed = $fizzBuzz->makeArray($integers,$fizzBuzz->input);
+$distributed = $fizzBuzz->makeArray($integers, $fizzBuzz->input);
 $fizzBuzz->reFizzBuzzIntegers($distributed);
+echo $fizzBuzz->printFizzBuzz($fizzBuzz->reFizzBuzzIntegers($distributed));
 
-
-//echo $fizzBuzz->printFizzBuzz($fizzBuzz->reFizzBuzzIntegers($distributed));
 
 
