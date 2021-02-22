@@ -59,19 +59,26 @@ function choseCoffee($allCoffee): array
 }
 
 
-function validateMoney(): string
+function validateMoney($coins): string
 {
     while (true) {
-        $userInput = readline("Insert coins: ");
+        $userInput = readline("Insert coin: ");
         $valueInteger = (int)$userInput;
         $valueFloat = (float)$userInput;
-        if (is_numeric($userInput) && $valueInteger == $valueFloat) {
+        if (is_numeric($userInput) && $valueInteger == $valueFloat &&
+            array_key_exists($userInput, $coins) && $coins[$userInput] > 0) {
             return $userInput;
         } else {
-            echo "Not valid!";
+            echo "Not valid!" . PHP_EOL;
         }
     }
 
+}
+
+function takeCoins(&$coins, $userInput): array
+{
+    $coins[$userInput] = $coins[$userInput] - 1;
+    return $coins;
 }
 
 
@@ -81,22 +88,45 @@ function insertedMoney(int &$payment, string $userInput): int
     return $payment;
 }
 
-function returnBalance(int $total, int $payment): int
+function calculateBalance(int $total, int $payment): int
 {
     return $total - $payment;
 }
 
-function putMoneyInWallet(int $moneyLeft, int $balance): int
+function getBalance(int $moneyLeft, int $balance): int
 {
     return $moneyLeft + $balance;
 }
 
+function putMoneyInWallet(&$coins, $money)
+{
+    for ($i = count($coins) - 1; $i >= 0; $i--) {
+        while ($money > array_keys($coins)[$i] || $money === array_keys($coins)[$i]) {
+            $money = $money - array_keys($coins)[$i];
+            $coins[array_keys($coins)[$i]] = $coins[array_keys($coins)[$i]] + 1;
+        }
+    }
+    return $coins;
+}
+
+function showWallet($wallet): string
+{
+    return implode(PHP_EOL, array_map(function ($coins, $index) {
+        return "$coins x $index coin/-s";
+    }, $wallet, array_keys($wallet)));
+
+}
+
+
+echo showWallet($wallet);
+echo PHP_EOL;
 
 $coffee = choseCoffee($coffeeMachine);
 
 while (true) {
 
-    $input = validateMoney();
+    $input = validateMoney($wallet);
+    takeCoins($wallet, $input);
     $moneyLeft = walletSum($userMoney, $input);
     echo "You have $moneyLeft cents left!" . PHP_EOL;
     $payment = insertedMoney($payed, $input);
@@ -104,11 +134,11 @@ while (true) {
 
     if ($coffee[1] <= $payment) {
         $payed = 0;
-        $balance = returnBalance($payment, $coffee[1]);
-        $userMoney = putMoneyInWallet($moneyLeft, $balance);
+        $balance = calculateBalance($payment, $coffee[1]);
+        $userMoney = getBalance($moneyLeft, $balance);
 
         echo PHP_EOL;
-        echo "Here is your $coffee[0]" . PHP_EOL;
+        echo "Here is your $coffee[0] !!!!" . PHP_EOL;
         echo "Your balance is $balance cents" . PHP_EOL;
         echo "You have $userMoney coins left!" . PHP_EOL;
         echo PHP_EOL;
@@ -119,6 +149,8 @@ while (true) {
             $coffee = choseCoffee($coffeeMachine);
         } else {
             echo "You have $userMoney cents left!" . PHP_EOL;
+            $walletAtEnd = putMoneyInWallet($wallet, $userMoney);
+            echo showWallet($walletAtEnd);
             exit;
         }
 
