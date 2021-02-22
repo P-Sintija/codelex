@@ -44,7 +44,7 @@ function walletSum(int &$coins, string $userInput): int
     return $coins;
 }
 
-function choseCoffee($allCoffee): array
+function choseCoffee(array $allCoffee): array
 {
     while (true) {
         $userChoice = readline("Coffee ? ");
@@ -59,7 +59,7 @@ function choseCoffee($allCoffee): array
 }
 
 
-function validateMoney($coins): string
+function validateMoney(array $coins): string
 {
     while (true) {
         $userInput = readline("Insert coin: ");
@@ -75,7 +75,7 @@ function validateMoney($coins): string
 
 }
 
-function takeCoins(&$coins, $userInput): array
+function takeCoins(array &$coins, string $userInput): array
 {
     $coins[$userInput] = $coins[$userInput] - 1;
     return $coins;
@@ -98,7 +98,7 @@ function getBalance(int $moneyLeft, int $balance): int
     return $moneyLeft + $balance;
 }
 
-function putMoneyInWallet(&$coins, $money)
+function putMoneyInWallet(array &$coins, int $money): array
 {
     for ($i = count($coins) - 1; $i >= 0; $i--) {
         while ($money > array_keys($coins)[$i] || $money === array_keys($coins)[$i]) {
@@ -109,7 +109,7 @@ function putMoneyInWallet(&$coins, $money)
     return $coins;
 }
 
-function showWallet($wallet): string
+function showWallet(array $wallet): string
 {
     return implode(PHP_EOL, array_map(function ($coins, $index) {
         return "$coins x $index coin/-s";
