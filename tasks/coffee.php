@@ -104,6 +104,7 @@ function putMoneyInWallet(array &$coins, int $money): array
         while ($money > array_keys($coins)[$i] || $money === array_keys($coins)[$i]) {
             $money = $money - array_keys($coins)[$i];
             $coins[array_keys($coins)[$i]] = $coins[array_keys($coins)[$i]] + 1;
+
         }
     }
     return $coins;
@@ -149,7 +150,7 @@ while (true) {
             $coffee = choseCoffee($coffeeMachine);
         } else {
             echo "You have $userMoney cents left!" . PHP_EOL;
-            $walletAtEnd = putMoneyInWallet($wallet, $userMoney);
+            $walletAtEnd = putMoneyInWallet($wallet, $balance);
             echo showWallet($walletAtEnd);
             exit;
         }
