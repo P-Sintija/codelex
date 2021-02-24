@@ -63,7 +63,7 @@ class FizzBuzz
 
     function printFizzBuzz(array $reFizzBuzz): string
     {
-        return implode(PHP_EOL, array_map(function ($digits) {
+        return implode(PHP_EOL, array_map(function (array $digits): string {
             return implode(" ", $digits);
         }, $reFizzBuzz));
     }

@@ -27,17 +27,16 @@ class RollTwoDice
         return $this->dice[rand(0, count($this->dice) - 1)];
     }
 
-    function checkIfWon($one, $two): bool
+    function checkIfWon(string $one, string $two): bool
     {
-        return $this->desiredSum == $one + $two;
+        return $this->desiredSum == (int)$one + (int)$two;
     }
 
 }
 
 $game = new RollTwoDice();
-echo PHP_EOL;
 
-echo "Desired sum: $game->desiredSum " . PHP_EOL;
+echo PHP_EOL . "Desired sum: $game->desiredSum " . PHP_EOL;
 
 while (true) {
 

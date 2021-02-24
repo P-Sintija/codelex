@@ -24,5 +24,6 @@ for ($i = 0; $i < $length; $i++) {
 
 $endWord = $firstWord . implode("", $middleWord) . $secondWord;
 echo $endWord;
+
 //echo PHP_EOL . strlen($endWord);
 

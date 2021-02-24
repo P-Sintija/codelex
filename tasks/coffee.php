@@ -16,10 +16,34 @@ $coinSum = [];
 $payed = 0;
 
 $coffeeMachine = [
-    "latte" => 1.80,
-    "black" => 1.30,
-    "white" => 1.50
+    "0" => ["latte", 1.80],
+    "1" => ["black coffee", 1.30],
+    "2" => ["white coffee", 1.50]
 ];
+
+function showCoffeeMachine(array $allCoffee): string
+{
+    return implode(PHP_EOL, array_map(function ($coffee, $index) {
+
+        return "[ $index ] $coffee[0] for " . number_format($coffee[1], 2) . " EUR";
+    }, $allCoffee, array_keys($allCoffee)));
+}
+
+
+function choseCoffee(array $allCoffee): array
+{
+    while (true) {
+        $userChoice = readline("Choose coffee : ");
+        $selectedCoffee = [];
+        if (array_key_exists($userChoice, $allCoffee)) {
+            $selectedCoffee[] = $allCoffee[$userChoice][0];
+            $selectedCoffee[] = $allCoffee[$userChoice][1] * 100;
+            return $selectedCoffee;
+        }
+    }
+
+}
+
 
 function walletStartSum(array $coins, array $sum): array
 {
@@ -42,20 +66,6 @@ function walletSum(int &$coins, string $userInput): int
 {
     $coins = $coins - $userInput;
     return $coins;
-}
-
-function choseCoffee(array $allCoffee): array
-{
-    while (true) {
-        $userChoice = readline("Coffee ? ");
-        $selectedCoffee = [];
-        if (array_key_exists($userChoice, $allCoffee)) {
-            $selectedCoffee[] = $userChoice;
-            $selectedCoffee[] = $allCoffee[$userChoice] * 100;
-            return $selectedCoffee;
-        }
-    }
-
 }
 
 
@@ -119,13 +129,16 @@ function showWallet(array $wallet): string
 }
 
 
-echo showWallet($wallet);
-echo PHP_EOL;
+echo showCoffeeMachine($coffeeMachine) . PHP_EOL;
 
 $coffee = choseCoffee($coffeeMachine);
 
+
 while (true) {
 
+    //print("\033[H\033[J");
+
+    echo showWallet($wallet) . PHP_EOL;
     $input = validateMoney($wallet);
     takeCoins($wallet, $input);
     $moneyLeft = walletSum($userMoney, $input);
@@ -134,16 +147,15 @@ while (true) {
     echo "Total: $payment cents" . PHP_EOL;
 
     if ($coffee[1] <= $payment) {
+        print("\033[H\033[J");
         $payed = 0;
         $balance = calculateBalance($payment, $coffee[1]);
         $userMoney = getBalance($moneyLeft, $balance);
-
         echo PHP_EOL;
         echo "Here is your $coffee[0] !!!!" . PHP_EOL;
         echo "Your balance is $balance cents" . PHP_EOL;
         echo "You have $userMoney coins left!" . PHP_EOL;
         echo PHP_EOL;
-
         $buyAnother = strtoupper(readline("To buy another coffee press Y : "));
 
         if ($buyAnother === "Y") {
@@ -161,6 +173,7 @@ while (true) {
         echo "You don`t have enough money left" . PHP_EOL;
         exit;
     }
+
 
 }
 

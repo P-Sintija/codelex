@@ -24,14 +24,13 @@
 
 class AsciiFigure
 {
-    const  height = 7;
+    const  height = 3;
     public array $grid;
 
     public function __construct()
     {
         $this->grid = [];
     }
-
 
     function create(): array
     {
@@ -41,7 +40,6 @@ class AsciiFigure
             }
 
             for ($p = 0; $p < $i * 8; $p++) {
-
                 $this->grid[] = "*";
             }
 

@@ -28,13 +28,11 @@ class Piglet
 {
     public array $dice;
     public int $points;
-    public bool $roll;
 
     public function __construct()
     {
         $this->dice = [1, 2, 3, 4, 5, 6];
         $this->points = 0;
-        $this->roll = true;
     }
 
     function rollDice(): int
@@ -51,7 +49,7 @@ class Piglet
 
 $piglet = new Piglet();
 
-while ($piglet->roll) {
+while (true) {
 
     $rolledPoints = $piglet->rollDice();
     echo "You rolled a $rolledPoints!" . PHP_EOL;
