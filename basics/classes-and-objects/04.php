@@ -1,5 +1,6 @@
 <?php
-//The class Movie is started below. An instance of class Movie represents a film. This class has the following three class variables:
+//The class Movie is started below. An instance of class Movie represents a film.
+//This class has the following three class variables:
 //
 //title, which is a string representing the title of the movie
 //studio, which is a string representing the studio that made the movie
@@ -22,6 +23,15 @@
 //with the title “Spider-Man: Into the Spider-Verse”, the studio “Columbia Pictures” and the rating “PG”.
 
 class Movie {
+private string $title;
+private string $studio;
+private string $rating;
+public function __construct(string $title, string $studio, string $rating)
+{
+    $this->title = $title;
+    $this->studio = $studio;
+    $this->rating = $rating;
+}
 
 }
 

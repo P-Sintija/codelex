@@ -27,6 +27,7 @@ if($dayNumber === "0") {
     echo "Not a valid day";
 }
 
+echo PHP_EOL;
 
 switch ($dayNumber) {
     case "0":

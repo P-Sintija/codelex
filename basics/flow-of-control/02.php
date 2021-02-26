@@ -7,4 +7,7 @@ if ($number > 0) {
     echo "Number is positive";
 } else if ($number < 0) {
     echo "Number is negative";
+} else {
+    echo "Invalid input";
 }
+

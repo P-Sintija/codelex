@@ -21,9 +21,9 @@
 
 class Product
 {
-    public string $name;
-    public float $price;
-    public int $amount;
+    private string $name;
+    private float $price;
+    private int $amount;
 
     public function __construct(string $name, float $priceAtStart, int $amountAtStart)
     {
@@ -32,65 +32,60 @@ class Product
         $this->amount = $amountAtStart;
     }
 
-    function printProduct(): string
+    public function printProduct(): string
     {
         return $this->name . ", " . $this->price . " EUR, " . $this->amount . " units";
     }
 
-    function changeQuantity($amount): int
+    public function changeQuantity(int $amount): void
     {
-        return $this->amount = $this->amount + $amount;
+        $this->amount = $this->amount + $amount;
     }
 
-    function changePrice($price): float
+    public function changePrice(float $price): void
     {
-        return $this->price = $this->price + $price;
+        $this->price = $this->price + $price;
     }
 
 }
 
 class ProductList
 {
-    public array $products;
+    public array $products = [];
 
-    public function __construct()
-    {
-        $this->products = [];
-    }
 
-    function printAll(): string
+    public function printAllProducts(): string
     {
-        return implode(PHP_EOL, array_map(function ($product) {
+        return implode(PHP_EOL, array_map(function (Product $product): string {
             return $product->printProduct();
         }, $this->products));
     }
 
-    function addNewProduct(Product $input): array
+    public function addNewProduct(Product $input): array
     {
         $this->products[] = $input;
         return $this->products;
     }
 
-
 }
 
 
-$list = new ProductList();
 $logitech = new Product("Logitech mouse", 70.00, 14);
 $iphone = new Product("iPhone 5s", 999.99, 3);
 $epson = new Product("Epson EB-U05", 440.46, 1);
+
+$list = new ProductList();
 
 $list->addNewProduct($logitech);
 $list->addNewProduct($iphone);
 $list->addNewProduct($epson);
 
-echo $list->printAll();
+echo $list->printAllProducts();
 
 $logitech->changePrice(-23.85);
 $iphone->changeQuantity(2);
 
-echo PHP_EOL;
-echo $list->printAll();
+echo PHP_EOL . $list->printAllProducts();
 
 
 

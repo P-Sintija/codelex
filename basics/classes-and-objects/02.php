@@ -13,34 +13,59 @@
 //(-3, 6)
 //(5, 2)
 
-class Point {
-    public int $x;
-    public int $y;
+class Point
+{
+    private int $x;
+    private int $y;
+
     public function __construct(int $x, int $y)
     {
         $this->x = $x;
         $this->y = $y;
     }
+
+    public function getPointValues(): array
+    {
+        return [$this->x, $this->y];
+    }
+
+    public function setValues(array $values): void
+    {
+        $this->x = $values[0];
+        $this->y = $values[1];
+    }
 }
 
-$p1 = new Point(5, 2);
+
+class PointSwapper
+{
+    private Point $pointOne;
+    private Point $pointTwo;
+
+    public function __construct(Point $pointOne, Point $pointTwo)
+    {
+        $this->pointOne = $pointOne;
+        $this->pointTwo = $pointTwo;
+    }
+
+    public function swapPoints(Point $one, Point $two): array
+    {
+        $memory = $one->getPointValues();
+        $one->setValues($two->getPointValues());
+        $two->setValues($memory);
+
+        return [$one, $two];
+    }
+
+}
+
+$p1 = new Point (5, 2);
 $p2 = new Point(-3, 6);
 
-function swapPoints(Point $one, Point $two): array {
-    $rememberX = $one->x;
-    $rememberY = $one->y;
+$swapper = new PointSwapper($p1, $p2);
 
-    $one->x = $two->x;
-    $one->y = $two->y;
-    $two->x = $rememberX;
-    $two->y = $rememberY;
+$swapper->swapPoints($p1, $p2);
 
-    return [$one, $two];
-
-}
-
-swapPoints($p1, $p2);
-
-echo "(" . $p1->x . ", " . $p1->y . ")" . PHP_EOL;
-echo "(" . $p2->x . ", " . $p2->y . ")";
+echo "(" . $p1->getPointValues()[0] . ", " . $p1->getPointValues()[1] . ")" . PHP_EOL;
+echo "(" . $p2->getPointValues()[0] . ", " . $p2->getPointValues()[1] . ")";
 

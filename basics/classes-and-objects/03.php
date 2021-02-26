@@ -29,61 +29,59 @@
 
 class FuelGauge
 {
-    public int $fuel;
+    private int $fuel = 0;
     const maximum = 70;
 
-    public function __construct()
-    {
-        $this->fuel = 0;
-    }
 
-    function litersLeft(): string
+    public function litersLeft(): int
     {
-        return $this->fuel . " liters left " . PHP_EOL;
-    }
-
-    function incrementLiters(int $fuel): int
-    {
-        if ($this->fuel < self::maximum) {
-            $this->fuel = $this->fuel + $fuel;
-        }
         return $this->fuel;
     }
 
-    function decrementLiters(): int
+    public function incrementLiters(int $fuel): void
     {
-        //if the amount of fuel is greater than 0 liters
-        return $this->fuel--;
+        if ($this->fuel + $fuel >= self::maximum) {
+            $this->fuel = self::maximum;
+        } else {
+            $this->fuel = $this->fuel + $fuel;
+        }
+    }
+
+    public function decrementLiters(): void
+    {
+        if ($this->fuel <= 0) return;
+        $this->fuel--;
     }
 
 }
 
+
 class Odometer
 {
-    public int $mileage;
-    const maximumMileage = 999.999;
+    private int $mileage = 0;
+    private const maximumMileage = 999999;
 
-    public function __construct()
+
+    public function reportMileage(): int
     {
-        $this->mileage = 0;
+        return $this->mileage;
     }
 
-    function reportMileage(): string
+    public function increaseMileage(): void
     {
-        return "Current mileage " . $this->mileage . PHP_EOL;
+        $this->mileage++;
     }
 
-    function increaseMileage(): int
-    {
-        return $this->mileage++;
-    }
-
-    function resetMileage(): int
+    public function resetMileage(): void
     {
         if ($this->mileage > self::maximumMileage) {
             $this->mileage = 0;
         }
-        return $this->mileage;
+    }
+
+    public function getMaximumMileage(): int
+    {
+        return self::maximumMileage;
     }
 
 }
@@ -91,24 +89,46 @@ class Odometer
 
 $carFuel = new FuelGauge();
 $carOdometer = new Odometer();
-$carFuel->incrementLiters(5);
-echo $carFuel->litersLeft();
+
+$carFuel->incrementLiters(56);
 
 $kilometersTraveled = 0;
 
-while ($carFuel->fuel > 0) {
 
-    $carOdometer->increaseMileage();
-    $carOdometer->resetMileage();
-    $kilometersTraveled = $kilometersTraveled + 1;
+while (true) {
 
-    while ($kilometersTraveled >= 10) {
-        $carFuel->decrementLiters();
-        $kilometersTraveled = 0;
+    print("\033[2J\033[;H");
+    echo 'You have ' . $carFuel->litersLeft() . ' liters left' . PHP_EOL;
+    echo 'Current mileage is ' . str_repeat(0, strlen((string)$carOdometer->getMaximumMileage())
+            - strlen((string)$carOdometer->reportMileage()))
+        . $carOdometer->reportMileage() . PHP_EOL;
+
+    $refuel = strtoupper(readline("Do you wan to fill up ? (yes: press y): "));
+    if ($refuel === "Y") {
+        $fuel = readline("Enter amount of fuel: ");
+        $carFuel->incrementLiters($fuel);
+
+        while ($carFuel->litersLeft() > 0) {
+            $carOdometer->increaseMileage();
+            $carOdometer->resetMileage();
+            $kilometersTraveled = $kilometersTraveled + 1;
+
+            while ($kilometersTraveled >= 10) {
+                $carFuel->decrementLiters();
+                $kilometersTraveled = 0;
+            }
+        }
+
+    } else {
+        if ($carFuel->litersLeft() > 0) {
+            echo 'You have ' . $carFuel->litersLeft() . ' liters left' . PHP_EOL;
+            exit;
+        } else {
+            echo('You are out of fuel!');
+            exit;
+        }
+
     }
-
-    echo $carOdometer->reportMileage();
-    echo $carFuel->litersLeft();
 
 }
 
