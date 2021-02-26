@@ -48,13 +48,12 @@ class PointSwapper
         $this->pointTwo = $pointTwo;
     }
 
-    public function swapPoints(Point $one, Point $two): array
+    public function swapPoints(Point $one, Point $two): void
     {
         $memory = $one->getPointValues();
         $one->setValues($two->getPointValues());
         $two->setValues($memory);
 
-        return [$one, $two];
     }
 
 }

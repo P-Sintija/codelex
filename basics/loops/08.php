@@ -16,33 +16,37 @@
 
 class NumberSquare
 {
-    public string $min;
-    public string $max;
-    public array $square;
+    private string $min;
+    private string $max;
+    private array $square;
 
-    public function __construct()
+
+    public function setMin(): void
     {
         $this->min = readline("Enter min : ");
-        $this->max = readline("Enter max : ");
-        $this->square = [];
     }
 
-    function createSquare(): array
+    public function setMax(): void
+    {
+        $this->max = readline("Enter max : ");
+    }
+
+    public function createSquare(): array
     {
 
         for ($i = $this->min; $i <= $this->max; $i++) {
             for ($j = $i; $j <= $this->max; $j++) {
                 $this->square[] = $j;
             }
-            for ($j = $this->min; $j < $i; $j++) {
-                $this->square[] = $j;
+            for ($p = $this->min; $p < $i; $p++) {
+                $this->square[] = $p;
             }
             $this->square[] = PHP_EOL;
         }
         return $this->square;
     }
 
-    function drawSquare(): string
+    public function drawSquare(): string
     {
         return implode(" ", $this->square);
     }
@@ -51,5 +55,8 @@ class NumberSquare
 
 
 $grid = new NumberSquare();
+$grid->setMin();
+$grid->setMax();
 $grid->createSquare();
 echo $grid->drawSquare();
+

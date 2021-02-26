@@ -51,7 +51,7 @@ class Product
 
 class ProductList
 {
-    public array $products = [];
+    private array $products;
 
 
     public function printAllProducts(): string
@@ -61,10 +61,9 @@ class ProductList
         }, $this->products));
     }
 
-    public function addNewProduct(Product $input): array
+    public function addNewProduct(Product $input): void
     {
         $this->products[] = $input;
-        return $this->products;
     }
 
 }

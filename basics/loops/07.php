@@ -13,21 +13,26 @@
 
 class RollTwoDice
 {
-    public array $dice;
-    public string $desiredSum;
+    private array $dice = [1, 2, 3, 4, 5, 6];
+    private string $desiredSum;
 
-    public function __construct()
+
+    public function setDesiredSum(): void
     {
-        $this->dice = [1, 2, 3, 4, 5, 6];
         $this->desiredSum = readline("Enter your desired sum from 2 to 12: ");
     }
 
-    function rollDice(): int
+    public function getDesiredSum(): string
+    {
+        return $this->desiredSum;
+    }
+
+    public function rollDice(): int
     {
         return $this->dice[rand(0, count($this->dice) - 1)];
     }
 
-    function checkIfWon(string $one, string $two): bool
+    public function checkIfWon(string $one, string $two): bool
     {
         return $this->desiredSum == (int)$one + (int)$two;
     }
@@ -35,8 +40,9 @@ class RollTwoDice
 }
 
 $game = new RollTwoDice();
+$game->setDesiredSum();
 
-echo PHP_EOL . "Desired sum: $game->desiredSum " . PHP_EOL;
+echo PHP_EOL . 'Desired sum: ' . $game->getDesiredSum() . PHP_EOL;
 
 while (true) {
 

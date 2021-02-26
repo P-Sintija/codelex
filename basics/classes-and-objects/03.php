@@ -30,7 +30,7 @@
 class FuelGauge
 {
     private int $fuel = 0;
-    const maximum = 70;
+    private const maximum = 70;
 
 
     public function litersLeft(): int

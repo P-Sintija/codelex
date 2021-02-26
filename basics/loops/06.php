@@ -24,15 +24,10 @@
 
 class AsciiFigure
 {
-    const  height = 3;
-    public array $grid;
+    private const height = 3;
+    private array $grid = [];
 
-    public function __construct()
-    {
-        $this->grid = [];
-    }
-
-    function create(): array
+    public function create(): array
     {
         for ($i = 0; $i < self::height; $i++) {
             for ($j = 1; $j < (self::height - $i) * 4 - 3; $j++) {
@@ -51,7 +46,7 @@ class AsciiFigure
         return $this->grid;
     }
 
-    function draw(): string
+    public function draw(): string
     {
         return implode("", $this->grid);
     }
