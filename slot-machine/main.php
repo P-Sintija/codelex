@@ -20,42 +20,64 @@ require_once 'SlotMachine.php';
 
 
 $slotMachine = new SlotMachine();
-$a = new SlotMachineElement('A');
-$b = new SlotMachineElement('B');
-$c = new SlotMachineElement('C');
-$d = new SlotMachineElement('D');
-$e = new SlotMachineElement('E');
+$a = new SlotMachineElement('A',1);
+$b = new SlotMachineElement('B',2);
+$c = new SlotMachineElement('C',3);
+$d = new SlotMachineElement('D',4);
+$e = new SlotMachineElement('E',5);
 
 $slotMachine->addElement($a);
 $slotMachine->addElement($b);
 $slotMachine->addElement($c);
 /////////////////////$slotMachine->addElement($d);
-/////////////////////////////$slotMachine->addElement($e);
+/////////////////////////$slotMachine->addElement($e);
 
-/*
+
+
+
 $userInput = readline("Insert money : ");
 $slotMachine->setStartSum($userInput);
-echo 'Your start sum is ' . $slotMachine->getStartSum() . PHP_EOL;
 
-$validation = false;
-while ($validation === false) {
-    $userBet = readline("Your bet : ");
-    if ($slotMachine->validateBet($userBet)) {
-        $slotMachine->setBet($userBet);
-        echo 'Your bet is ' . $slotMachine->getBet() . PHP_EOL;
-        $validation = true;
+
+while(true) {
+
+   // print("\033[2J\033[;H");
+
+    echo 'Your start sum is ' . $slotMachine->getStartSum() .' cents'. PHP_EOL;
+    $validation = false;
+    while ($validation === false) {
+        $userBet = readline("Enter your BET or any key to Exit : ");
+        if(is_numeric($userBet)){
+        if ($slotMachine->validateBet($userBet)) {
+            $slotMachine->setBet($userBet);
+            echo 'Your BET is ' . $slotMachine->getBet() . PHP_EOL;
+            $validation = true;
+        } else {
+            echo 'You dont have enough money!' . PHP_EOL;
+        }
     } else {
-        echo 'You dont have enough money!' . PHP_EOL;
+            $endMoney = $slotMachine->getStartSum() + $slotMachine->getMoneyWon();
+            echo 'You won ' . $endMoney . 'cents!!';
+            exit;
+        }
+
     }
+
+    $slotMachine->createGameGrid();
+
+    $grid = explode(PHP_EOL, $slotMachine->displayGameBoard());
+
+    for($i=0;$i<count($grid); $i++){
+           echo $grid[$i] . PHP_EOL;
+           sleep(2);
+    }
+
+    $slotMachine->setMoneyWon($slotMachine->countPoints());
+    echo 'Won ' . $slotMachine->getMoneyWon() . ' cents!' . PHP_EOL;
+
+
+
 }
-*/
-
-$slotMachine->createGameGrid();
-echo $slotMachine->displayGameBoard();
-echo $slotMachine->countPoints();
-
-
-
 
 
 

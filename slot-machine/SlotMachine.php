@@ -2,9 +2,9 @@
 
 class SlotMachine
 {
-    private int $startSum; //5eur piem 500
-    private int $bet; // minimālais ar ko sāk, piem 10 centi utt
-    private const step = 10;
+    private int $startSum;
+    private int $bet;
+    private int $moneyWon = 0;
     private const elementsInRow = 3;
     private array $elementList;
     private array $gameBoard;
@@ -60,11 +60,22 @@ class SlotMachine
 
     public function displayGameBoard(): string
     {
-        return $gridString = implode(PHP_EOL, array_map(function ($cell) {
+        return $gridString = implode(PHP_EOL, array_map(function ($cell): string {
                 return implode(" ", $cell);
             }, $this->gameBoard)) . PHP_EOL;
-
     }
+
+    private function elementValue(string $name): int
+    {
+        $points = 0;
+        for ($i = 0; $i < count($this->elementList); $i++) {
+            if ($name === $this->elementList[$i]->getElement()) {
+                $points = $this->elementList[$i]->getRate();
+            }
+        }
+        return $points;
+    }
+
 
     public function countPoints(): int
     {
@@ -73,30 +84,35 @@ class SlotMachine
         for ($i = 0; $i < count($this->gameBoard); $i++) {
             if (($this->gameBoard[$i][0] === $this->gameBoard[$i][1] &&
                 $this->gameBoard[$i][1] === $this->gameBoard[$i][2])) {
-                echo "first";
-                $points = $points + 1;
+                $points = $points + $this->elementValue($this->gameBoard[$i][0]);
             }
             if ($this->gameBoard[0][$i] === $this->gameBoard[1][$i] &&
                 $this->gameBoard[1][$i] === $this->gameBoard[2][$i]) {
-                echo "second";
-                $points = $points + 1;
+                $points = $points + $this->elementValue($this->gameBoard[0][$i]);
             }
             if ($this->gameBoard[0][0] === $this->gameBoard[1][1] &&
                 $this->gameBoard[1][1] === $this->gameBoard[2][2] && !$tested) {
-                echo "third";
-                $points = $points + 1;
+                $points = $points + $this->elementValue($this->gameBoard[0][0]);
                 $tested = true;
             }
             if ($this->gameBoard[0][2] === $this->gameBoard[1][1] &&
                 $this->gameBoard[1][1] === $this->gameBoard[2][0] && !$tested) {
-                echo "forth";
-                $points = $points + 1;
+                $points = $points + $this->elementValue($this->gameBoard[0][2]);
                 $tested = true;
             }
         }
         return $points;
     }
 
+    public function setMoneyWon(int $points): void
+    {
+        $this->moneyWon = $this->moneyWon + $this->bet * $points;
+    }
+
+    public function getMoneyWon(): int
+    {
+        return $this->moneyWon;
+    }
 
 }
 
