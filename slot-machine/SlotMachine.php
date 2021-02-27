@@ -2,7 +2,7 @@
 
 class SlotMachine
 {
-    private int $startSum;
+    private int $startSum = 0;
     private int $bet;
     private int $moneyWon = 0;
     private const elementsInRow = 3;
@@ -14,14 +14,14 @@ class SlotMachine
         $this->elementList[] = $element;
     }
 
-    public function getElementList(): array
-    {
-        return $this->elementList;
-    }
-
     public function setStartSum(int $cents): void
     {
-        $this->startSum = $cents;
+        $this->startSum = $this->startSum + $cents;
+    }
+
+    public function decreaseStartSum(int $cents): void
+    {
+        $this->startSum = $this->startSum - $cents;
     }
 
     public function getStartSum(): int
@@ -46,7 +46,7 @@ class SlotMachine
 
     public function createGameGrid(): void
     {
-        $row = array_fill(0, self::elementsInRow, "o");
+        $row = array_fill(0, self::elementsInRow, "");
         $this->gameBoard = array_fill(0, self::elementsInRow, $row);
 
         for ($i = 0; $i < self::elementsInRow; $i++) {
@@ -60,20 +60,27 @@ class SlotMachine
 
     public function displayGameBoard(): string
     {
-        return $gridString = implode(PHP_EOL, array_map(function ($cell): string {
+        return $gridString = implode(PHP_EOL, array_map(function (array $cell): string {
                 return implode(" ", $cell);
             }, $this->gameBoard)) . PHP_EOL;
     }
 
     private function elementValue(string $name): int
     {
-        $points = 0;
         for ($i = 0; $i < count($this->elementList); $i++) {
             if ($name === $this->elementList[$i]->getElement()) {
-                $points = $this->elementList[$i]->getRate();
+               return $this->elementList[$i]->getRate();
             }
         }
-        return $points;
+    }
+
+    public function wonFreeGames(string $name): bool
+    {
+        for ($i = 0; $i < count($this->elementList); $i++) {
+            if ($name === $this->elementList[$i]->getElement()) {
+                return $this->elementList[$i]->getFreeGames();
+            }
+        }
     }
 
 
@@ -106,13 +113,16 @@ class SlotMachine
 
     public function setMoneyWon(int $points): void
     {
-        $this->moneyWon = $this->moneyWon + $this->bet * $points;
+        $this->moneyWon = $this->bet * $points;
     }
 
     public function getMoneyWon(): int
     {
         return $this->moneyWon;
     }
+
+
+
 
 }
 
