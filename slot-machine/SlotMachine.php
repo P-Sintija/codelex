@@ -8,6 +8,7 @@ class SlotMachine
     private const elementsInRow = 3;
     private array $elementList;
     private array $gameBoard;
+    private bool $freeGames = false;
 
     public function addElement(SlotMachineElement $element): void
     {
@@ -114,6 +115,37 @@ class SlotMachine
     {
         return $this->moneyWon;
     }
+
+    public function setFreeGame(): void
+    {
+        $tested = false;
+        for ($i = 0; $i < count($this->gameBoard); $i++) {
+            if (($this->gameBoard[$i][0] === $this->gameBoard[$i][1] &&
+                    $this->gameBoard[$i][1] === $this->gameBoard[$i][2]) && $this->gameBoard[$i][0] === "*") {
+                $this->freeGames = true;
+            }
+            if ($this->gameBoard[0][$i] === $this->gameBoard[1][$i] &&
+                $this->gameBoard[1][$i] === $this->gameBoard[2][$i] && $this->gameBoard[0][$i] === "*") {
+                $this->freeGames = true;
+            }
+            if ($this->gameBoard[0][0] === $this->gameBoard[1][1] &&
+                $this->gameBoard[1][1] === $this->gameBoard[2][2] && !$tested && $this->gameBoard[0][0] === "*") {
+                $this->freeGames = true;
+                $tested = true;
+            }
+            if ($this->gameBoard[0][2] === $this->gameBoard[1][1] &&
+                $this->gameBoard[1][1] === $this->gameBoard[2][0] && !$tested && $this->gameBoard[0][2] === "*") {
+                $this->freeGames = true;
+                $tested = true;
+            }
+        }
+    }
+
+    public function getFreeGames(): bool
+    {
+        return $this->freeGames;
+    }
+
 
 }
 
