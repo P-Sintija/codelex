@@ -14,6 +14,7 @@ class SlotMachine
         $this->elementList[] = $element;
     }
 
+
     public function setStartSum(int $cents): void
     {
         $this->startSum = $this->startSum + $cents;
@@ -28,6 +29,7 @@ class SlotMachine
     {
         return $this->startSum;
     }
+
 
     public function setBet(int $cents): void
     {
@@ -44,6 +46,7 @@ class SlotMachine
         return $cents <= $this->startSum;
     }
 
+
     public function createGameGrid(): void
     {
         $row = array_fill(0, self::elementsInRow, "");
@@ -57,30 +60,11 @@ class SlotMachine
 
     }
 
-
     public function displayGameBoard(): string
     {
         return $gridString = implode(PHP_EOL, array_map(function (array $cell): string {
                 return implode(" ", $cell);
             }, $this->gameBoard)) . PHP_EOL;
-    }
-
-    private function elementValue(string $name): int
-    {
-        for ($i = 0; $i < count($this->elementList); $i++) {
-            if ($name === $this->elementList[$i]->getElement()) {
-               return $this->elementList[$i]->getRate();
-            }
-        }
-    }
-
-    public function wonFreeGames(string $name): bool
-    {
-        for ($i = 0; $i < count($this->elementList); $i++) {
-            if ($name === $this->elementList[$i]->getElement()) {
-                return $this->elementList[$i]->getFreeGames();
-            }
-        }
     }
 
 
@@ -111,6 +95,16 @@ class SlotMachine
         return $points;
     }
 
+    private function elementValue(string $name): int
+    {
+        for ($i = 0; $i < count($this->elementList); $i++) {
+            if ($name === $this->elementList[$i]->getElement()) {
+                return $this->elementList[$i]->getRate();
+            }
+        }
+    }
+
+
     public function setMoneyWon(int $points): void
     {
         $this->moneyWon = $this->bet * $points;
@@ -121,15 +115,6 @@ class SlotMachine
         return $this->moneyWon;
     }
 
-
-
-
 }
-
-
-
-
-
-
 
 

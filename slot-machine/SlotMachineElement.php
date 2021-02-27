@@ -4,9 +4,8 @@ class SlotMachineElement
 {
     private string $name;
     private int $rate;
-    private bool $freeGames;
 
-    public function __construct(string $element, int $rate, bool $freeGames)
+    public function __construct(string $element, int $rate)
     {
         $this->name = $element;
         $this->rate = $rate;
@@ -22,10 +21,6 @@ class SlotMachineElement
         return $this->rate;
     }
 
-    public function getFreeGames(): bool
-    {
-        return $this->freeGames;
-    }
 
 }
 
