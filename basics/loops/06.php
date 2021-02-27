@@ -24,13 +24,25 @@
 
 class AsciiFigure
 {
-    private const height = 3;
+    private const heightThree = 3;
+    private const heightFive = 5;
+    private const heightSeven = 7;
+    private const height = 6;
     private array $grid = [];
 
-    public function create(): array
+    public function create(int $height): array
     {
-        for ($i = 0; $i < self::height; $i++) {
-            for ($j = 1; $j < (self::height - $i) * 4 - 3; $j++) {
+        if ($height == 3) {
+            $height = self::heightThree;
+        } else if ($height == 5) {
+            $height = self::heightFive;
+        } else if ($height == 7) {
+            $height = self::heightSeven;
+        } else {
+            $height = self::height;
+        }
+        for ($i = 0; $i < $height; $i++) {
+            for ($j = 1; $j < ($height - $i) * 4 - 3; $j++) {
                 $this->grid[] = "/";
             }
 
@@ -38,7 +50,7 @@ class AsciiFigure
                 $this->grid[] = "*";
             }
 
-            for ($j = 1; $j < (self::height - $i) * 4 - 3; $j++) {
+            for ($j = 1; $j < ($height - $i) * 4 - 3; $j++) {
                 $this->grid[] = "\\";
             }
             $this->grid[] = PHP_EOL;
@@ -54,7 +66,8 @@ class AsciiFigure
 }
 
 $figure = new AsciiFigure();
-$figure->create();
+$height = readline("Choose height (3/5/7) : ");
+$figure->create($height);
 echo $figure->draw();
 
 
