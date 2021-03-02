@@ -22,17 +22,61 @@
 //with the title “Glass”, the studio “Buena Vista International” and the rating “PG­13”;
 //with the title “Spider-Man: Into the Spider-Verse”, the studio “Columbia Pictures” and the rating “PG”.
 
-class Movie {
-private string $title;
-private string $studio;
-private string $rating;
-public function __construct(string $title, string $studio, string $rating)
+class Movie
 {
-    $this->title = $title;
-    $this->studio = $studio;
-    $this->rating = $rating;
-}
+    private string $title;
+    private string $studio;
+    private string $rating;
+
+    public function __construct(string $title, string $studio, string $rating)
+    {
+        $this->title = $title;
+        $this->studio = $studio;
+        $this->rating = $rating;
+    }
+
+    public function getMovieInfo(): string
+    {
+        return 'Movie title: ' . $this->title . '; studio: ' . $this->studio . '; rating: ' . $this->rating . PHP_EOL;
+    }
+
+    public function getMovieRating(): string
+    {
+        return $this->rating;
+    }
 
 }
+
+class MovieList
+{
+    private array $movieList;
+
+    public function addMovie(Movie $input): void
+    {
+        $this->movieList [] = $input;
+    }
+
+    public function getPG(string $findRating): array
+    {
+        return array_filter($this->movieList, function (Movie $movie) use ($findRating) {
+            return strpos($movie->getMovieRating(), $findRating) === 0;
+        });
+    }
+
+}
+
+$casino = new Movie('Casino Royale', 'Eon Productions', 'PG­13');
+$glass = new Movie('Glass', 'Buena Vista International', 'PG­13');
+$spiderMan = new Movie('Spider-Man: Into the Spider-Verse', 'Columbia Pictures', 'PG');
+
+$movieList = new MovieList();
+$movieList->addMovie($casino);
+$movieList->addMovie($glass);
+$movieList->addMovie($spiderMan);
+
+foreach ($movieList->getPG('PG') as $movie) {
+    echo $movie->getMovieInfo();
+}
+
 
 
