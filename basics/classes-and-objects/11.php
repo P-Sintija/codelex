@@ -64,17 +64,121 @@ class Account
         return $this->accountsName . ' ' . $this->balance . PHP_EOL;
     }
 
+    public function balance(): float
+    {
+        return $this->balance;
+    }
+
+
+    public function withdrawal(float $amount): void
+    {
+        $this->balance = $this->balance - $amount;
+    }
+
+    public function deposit(float $amount): void
+    {
+        $this->balance = $this->balance + $amount;
+    }
+
+}
+
+
+class Bank
+{
+    private array $accounts = [];
+
+    public function addAccount(Account $account): void
+    {
+        $this->accounts[] = $account;
+    }
+
+    public function depositMoney(string $name, float $deposit): void
+    {
+        array_filter($this->accounts, function (Account $account) use ($name, $deposit): void {
+            if ($account->accountsName === $name) {
+                $account->deposit($deposit);
+            }
+        });
+    }
+
+    public function withdrawalMoney(string $name, float $withdrawal): void
+    {
+        array_filter($this->accounts, function (Account $account) use ($name, $withdrawal): void {
+            if ($account->accountsName === $name) {
+                $account->withdrawal($withdrawal);
+            }
+        });
+    }
+
+
+    public function printAccount(string $name): string
+    {
+        for ($i = 0; $i < count($this->accounts); $i++) {
+            if ($this->accounts[$i]->accountsName === $name) {
+                return $this->accounts[$i]->accountsName . ' ' . $this->accounts[$i]->balance . PHP_EOL;
+            }
+        }
+        return 'No such account!';
+    }
+
+    public function transfer(Account $from, Account $to, float $howMuch): void
+    {
+        $from->withdrawal($howMuch);
+        $to->deposit($howMuch);
+    }
+
+
 }
 
 $bartosAccount = new Account("Barto's account", 100.00);
 $bartosSwissAccount = new Account("Barto's account in Switzerland", 1000000.00);
 
-echo "Initial state";
-echo $bartosAccount;
-echo $bartosSwissAccount;
+//echo "Initial state";
+//echo $bartosAccount;
+//echo $bartosSwissAccount;
+
+$bartosAccount->withdrawal(20);
+//echo "Barto's account balance is now: " . $bartosAccount->balance();
+//echo PHP_EOL;
+$bartosSwissAccount->deposit(200);
+//echo "Barto's Swiss account balance is now: ".$bartosSwissAccount->balance();
+//echo PHP_EOL;
+
+//echo "Final state";
+//echo $bartosAccount;
+//echo $bartosSwissAccount;
 
 
+$bank = new Bank;
+$firstAccount = new Account('First account', 100.0);
+$bank->addAccount($firstAccount);
+$bank->depositMoney('First account', 20.0);
+//echo $bank->printAccount('First account');
 
 
+$mattsAccount = new Account('Matt`s account', 1000);
+$myAccount = new Account('My account', 0);
+$bank->addAccount($mattsAccount);
+$bank->addAccount($myAccount);
+$bank->withdrawalMoney('Matt`s account', 100.0);
+$bank->depositMoney('My account', 100.0);
+//echo $bank->printAccount('Matt`s account');
+//echo $bank->printAccount('My account');
+
+
+$a = new Account('A', 100.0);
+$b = new Account('B', 0.0);
+$c = new Account('C', 0.0);
+
+$bank->addAccount($a);
+$bank->addAccount($b);
+$bank->addAccount($c);
+
+$bank->transfer($a, $b, 50.0);
+$bank->transfer($b, $c, 25.0);
+
+echo $bank->printAccount('A');
+echo $bank->printAccount('B');
+echo $bank->printAccount('C');
 
 
