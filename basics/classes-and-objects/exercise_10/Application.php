@@ -1,6 +1,14 @@
 <?php
+
 class Application
 {
+    private VideoStore $store;
+
+    public function __construct(VideoStore $store)
+    {
+        $this->store = $store;
+    }
+
     function run()
     {
         while (true) {
@@ -10,24 +18,38 @@ class Application
             echo "Choose 2 to rent video (as user)\n";
             echo "Choose 3 to return video (as user)\n";
             echo "Choose 4 to list inventory\n";
+            echo 'Choose 5 to rate video' . PHP_EOL;
 
-            $command = (int)readline();
+            $command = (int)readline('- ');
 
             switch ($command) {
                 case 0:
                     echo "Bye!";
                     die;
                 case 1:
-                    $this->addMovies();
+                    print("\033[2J\033[;H");
+                    $movie = (string)readline('Enter movie title: ');
+                    $this->addMovies($movie);
                     break;
                 case 2:
-                    $this->rentVideo();
+                    print("\033[2J\033[;H");
+                    $title = (string)readline('Enter movie title you want to rent: ');
+                    $this->rentVideo($title);
                     break;
                 case 3:
-                    $this->returnVideo();
+                    print("\033[2J\033[;H");
+                    $title = (string)readline('Movie returned : ');
+                    $this->returnVideo($title);
                     break;
                 case 4:
-                    $this->listInventory();
+                    print("\033[2J\033[;H");
+                    echo $this->listInventory();
+                    break;
+                case 5:
+                    print("\033[2J\033[;H");
+                    $title = (string)readline('Movie title : ');
+                    $rating = (int)readline('Movie rating : ');
+                    $this->rateMovie($title, $rating);
                     break;
                 default:
                     echo "Sorry, I don't understand you..";
@@ -35,23 +57,30 @@ class Application
         }
     }
 
-    private function addMovies()
+    private function addMovies(string $movie): void
     {
-        //todo
+        $this->store->addVideo(new Video($movie));
     }
 
-    private function rentVideo()
+    private function rentVideo(string $title): void
     {
-        //todo
+        $this->store->checkOut($title);
     }
 
-    private function returnVideo()
+    private function returnVideo(string $title): void
     {
-        //todo
+        $this->store->returnVideo($title);
     }
 
-    private function listInventory()
+    private function listInventory(): string
     {
-        //todo
+        return $this->store->listInventory();
     }
+
+    private function rateMovie(string $title, int $rating): void
+    {
+        $this->store->takeRating($title, $rating);
+    }
+
 }
+

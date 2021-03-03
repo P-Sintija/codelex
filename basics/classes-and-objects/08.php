@@ -30,6 +30,7 @@
 //How much money is in the account?: 10000
 //Enter the annual interest rate:5
 //How long has the account been opened? 4
+
 //Enter amount deposited for month: 1: 100
 //Enter amount withdrawn for 1: 1000
 //Enter amount deposited for month: 2: 230
@@ -46,36 +47,89 @@
 class SavingsAccount
 {
     private int $annualInterestRate;
-    private int $balance;
+    private float $balance;
+    private array $withdrawn;
+    private array $deposit;
+    private array $interestEarned;
+
     public function __construct(int $startingBalance)
     {
+        $this->balance = $startingBalance;
     }
 
-    //The class should also have methods for:
-//subtracting the amount of a withdrawal
-//adding the amount of a deposit
 
+    public function getBalance(): float
+    {
+        return $this->balance;
+    }
 
-public function subtractingWithdrawal(int $withdrawal): void
-{
-$this->balance = $this->balance - $withdrawal;
+    public function setAnnualInterestRate(int $interest): void
+    {
+        $this->annualInterestRate = $interest;
+    }
+
+    public function subtractingWithdrawal(int $withdraw): void
+    {
+        if($withdraw > $this->balance) return;
+        $this->balance = $this->balance - $withdraw;
+        $this->withdrawn [] = $withdraw;
+    }
+
+    public function addDeposit(int $deposit): void
+    {
+        if($deposit < 0) return;
+        $this->balance = $this->balance + $deposit;
+        $this->deposit[] = $deposit;
+    }
+
+    public function addMonthlyInterest(): void
+    {
+        $monthlyInterestRate = $this->annualInterestRate / 12;
+        $this->interestEarned [] = ($monthlyInterestRate * $this->balance + $this->balance) - $this->balance;
+
+        $this->balance = $monthlyInterestRate * $this->balance + $this->balance;
+
+    }
+
+    public function getInterestEarned(): float
+    {
+        return array_sum($this->interestEarned);
+    }
+
+}
+
+$balance = readline('How much money is in the account?: ');
+$account = new SavingsAccount($balance);
+
+$annualInterest = readline('Enter the annual interest rate: ');
+$account->setAnnualInterestRate($annualInterest);
+
+$counter = 1;
+$time = readline('How long has the account been opened? ');
+
+$totalDeposit = [];
+$totalWithdrawn = [];
+
+while ($counter <= $time) {
+
+    $deposit = readline('Enter amount deposited for month: ' . $counter . ': ');
+    $account->addDeposit($deposit);
+    $totalDeposit[] = $deposit;
+
+    $withdrawal = readline('Enter amount withdrawn for ' . $counter . ': ');
+    $account->subtractingWithdrawal($withdrawal);
+    $totalWithdrawn[] = $withdrawal;
+
+    $account->addMonthlyInterest();
+
+    $counter++;
 }
 
 
-
-
-
-//adding the amount of monthly interest to the balance
-
-    //The monthly interest rate is the annual interest rate divided by twelve.
-//To add the monthly interest to the balance, multiply the monthly interest rate by the balance,
-//and add the result to the balance.
-
-
-
-}
-
-
+echo "Total deposited: $" . number_format(array_sum($totalDeposit), 2, '.', ',') . PHP_EOL;
+echo "Total withdrawn: $" . number_format(array_sum($totalWithdrawn), 2, '.', ',') . PHP_EOL;
+echo "Interest earned: $" . number_format($account->getInterestEarned(), 2, '.', ',') . PHP_EOL;
+echo "Ending balance: $" . number_format($account->getBalance(), 2, '.', ',') . PHP_EOL;
 
 
 

@@ -28,26 +28,54 @@ class Dog
 {
     private string $name;
     private string $sex;
-    private string $mother;
-    private string $father;
+    private ?string $mother;
+    private ?string $father;
 
-    public function __construct(string $name, string $sex)
+    public function __construct(string $name, string $sex, ?string $mother = null, ?string $father = null)
     {
         $this->name = $name;
         $this->sex = $sex;
+        $this->mother = $mother;
+        $this->father = $father;
     }
 
-    public function setFather (string $fathersName):void
+    public function getName(): string
     {
-        $this->father = $fathersName;
+        return $this->name;
     }
 
-    public function fathersName (): string
+
+    public function setFather(?string $fathersName): void
+    {
+        if ($fathersName !== null) {
+            $this->father = $fathersName;
+        }
+
+    }
+
+    public function fathersName(): string
     {
         if ($this->father === null) {
             return "Unknown";
         } else {
             return $this->father;
+        }
+    }
+
+    public function setMother(?string $mothersName): void
+    {
+        if ($mothersName !== null) {
+            $this->mother = $mothersName;
+        }
+
+    }
+
+    public function mothersName(): string
+    {
+        if ($this->mother === null) {
+            return "Unknown";
+        } else {
+            return $this->mother;
         }
     }
 
@@ -57,41 +85,64 @@ class DogTest
 {
     private array $dogList = [];
 
-    public function addDog (Dog $dog) :void
+    public function __construct(array $dogs)
     {
-        $this->dogList[] = $dog;
+        foreach ($dogs as $dog) {
+            if ($dog instanceof Dog) {
+                $this->dogList[] = $dog;
+            }
+        }
     }
 
+    public function getDogs(): array
+    {
+        return $this->dogList;
+    }
+
+
+    public function dogsParents(string $dogName, ?string $fathersName, ?string $mothersName): void
+    {
+        array_filter($this->dogList, function (Dog $dog) use ($dogName, $fathersName, $mothersName) {
+            if ($dog->getName() === $dogName) {
+                if ($fathersName !== null) {
+                    $dog->setFather($fathersName);
+                }
+                if ($mothersName !== null) {
+                    $dog->setMother($mothersName);
+                }
+            }
+        });
+    }
 
 
 }
 
-/*
-$max = new Dog ('Max', 'male');
-$rocky = new Dog ('Rocky', 'male');
-$sparky = new Dog ('Sparky','male');
-$buster = new Dog('Buster','male');
-$sam = new Dog('Sam','male');
-$lady = new Dog('Lady','female');
-$molly = new Dog('Molly','female');
-$coco = new Dog('Coco','female');
 
-$max->setFather('MMMM');
-echo $max->fathersName();
-echo $sparky->fathersName();
-*/
+$allDogs = new DogTest([
+    new Dog ('Max', 'male'),
+    new Dog ('Rocky', 'male'),
+    new Dog ('Sparky', 'male'),
+    new Dog('Buster', 'male'),
+    new Dog('Sam', 'male'),
+    new Dog('Lady', 'female'),
+    new Dog('Molly', 'female'),
+    new Dog('Coco', 'female')
+]);
 
-$allDogs = new DogTest();
-$allDogs->addDog($max = new Dog ('Max', 'male'));
-$allDogs->addDog($rocky = new Dog ('Rocky', 'male'));
-$allDogs->addDog($sparky = new Dog ('Sparky','male'));
-$allDogs->addDog($buster = new Dog('Buster','male'));
-$allDogs->addDog($sam = new Dog('Sam','male'));
-$allDogs->addDog($lady = new Dog('Lady','female'));
-$allDogs->addDog($molly = new Dog('Molly','female'));
-$allDogs->addDog($coco = new Dog('Coco','female'));
-/**/
-//var_dump($allDogs->dogList);
+$allDogs->dogsParents('Max', 'Rocky', 'Lady');
+$allDogs->dogsParents('Coco', 'Buster', 'Molly');
+$allDogs->dogsParents('Rocky', 'Sam', 'Molly');
+$allDogs->dogsParents('Buster', 'Sparky', 'Lady');
+$allDogs->dogsParents('Sparky', 'Max', null);
+$allDogs->dogsParents('Sam', null, 'Coco');
+
+foreach ($allDogs->getDogs() as $dog) {
+    /** @var $dog Dog */
+    echo $dog->getName() . ' has ' . $dog->mothersName() . ' as mother, and ' .
+        $dog->fathersName() . ' as father' . PHP_EOL;
+}
+
+
 
 
 

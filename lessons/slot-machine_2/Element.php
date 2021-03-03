@@ -15,7 +15,7 @@ class Element
         return $this->symbol;
     }
 
-    public function reward () : int
+    public function reward() : int
     {
         return $this->reward;
     }

@@ -21,12 +21,14 @@
 //return a video to the store;
 //take a user's rating for a video;
 //list the whole inventory of videos in the store.
+
 //Finally, create a VideoStoreTest which will test the functionality of your other two classes. It should allow the following:
 //
 //Add 3 videos: "The Matrix", "Godfather II", "Star Wars Episode IV: A New Hope".
 //Give several ratings to each video.
 //Rent each video out once and return it.
 //List the inventory after "Godfather II" has been rented out out.
+
 //Summary of design specs:
 //
 //Store a library of videos identified by title.
@@ -42,9 +44,9 @@ require_once 'Video.php';
 require_once 'VideoStore.php';
 require_once 'Application.php';
 
-
-
-
-$app = new Application();
+$store = new VideoStore;
+$app = new Application($store);
 $app->run();
+
+
 

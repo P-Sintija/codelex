@@ -8,19 +8,17 @@
 //The approximate number of customers in the survey who purchased one or more energy drinks per week
 //The approximate number of customers in the survey who prefer citrus flavored energy drinks
 
-$surveyed = 12467;
-$purchasedEnergyDrinks = 0.14;
-$preferCitrusDrinks = 0.64;
-
-function calculateEnergyDrinkers(int $numberSurveyed)
-{
-    throw new LogicException(";(");
-}
-
-function calculatePreferCitrus(int $numberSurveyed)
-{
-    throw new LogicException(";(");
-}
+//$surveyed = 12467;
+//$purchasedEnergyDrinks = 0.14;
+//$preferCitrusDrinks = 0.64;
+//function calculateEnergyDrinkers(int $numberSurveyed)
+//{
+//    throw new LogicException(";(");
+//}
+//function calculatePreferCitrus(int $numberSurveyed)
+//{
+//    throw new LogicException(";(");
+//}
 
 /*
 fixme
@@ -29,6 +27,89 @@ echo "Approximately " . ? . " bought at least one energy drink";
 echo ? . " of those " . "prefer citrus flavored energy drinks.";
 */
 
+class EnergyDrinkSurvey
+{
+    private int $totalSurveyed = 0;
+    private float $purchasedEnergyDrinks;
+    private float $preferCitrusDrinks;
+    private int $surveyedEnergyDrinkers = 0;
+    private int $surveyedPreferCitrus = 0;
+
+
+    public function setTotalSurveyed(int $amount): void
+    {
+        if ($amount < 0) return;
+
+        $this->totalSurveyed = $amount;
+    }
+
+    public function setPurchasedEnergyDrinks(float $amount): void
+    {
+        if ($amount < 0) return;
+        $this->purchasedEnergyDrinks = $amount;
+    }
+
+    public function setPreferCitrusDrinks(float $amount): void
+    {
+        if ($amount < 0) return;
+        $this->preferCitrusDrinks = $amount;
+    }
+
+    public function calculateEnergyDrinkers(): void
+    {
+        $this->surveyedEnergyDrinkers = $this->getTotalSurveyed() * $this->getPurchasedEnergyDrinks();
+    }
+
+
+    public function calculatePreferCitrus(): void
+    {
+        $this->surveyedPreferCitrus = $this->getTotalSurveyed() * $this->getPreferCitrusDrinks();
+    }
+
+
+    public function getTotalSurveyed(): int
+    {
+        return $this->totalSurveyed;
+    }
+
+    public function getPreferCitrus(): float
+    {
+        return $this->surveyedPreferCitrus;
+    }
+
+    public function getEnergyDrinkers(): float
+    {
+        return $this->surveyedEnergyDrinkers;
+    }
+
+
+    private function getPurchasedEnergyDrinks(): float
+    {
+        return $this->purchasedEnergyDrinks;
+    }
+
+    private function getPreferCitrusDrinks(): float
+    {
+        return $this->preferCitrusDrinks;
+    }
+
+}
+
+$surveyed = 12467;
+$purchasedEnergyDrinks = 0.14;
+$preferCitrusDrinks = 0.64;
+
+$survey = new EnergyDrinkSurvey();
+$survey->setTotalSurveyed($surveyed);
+$survey->setPurchasedEnergyDrinks($purchasedEnergyDrinks);
+$survey->setPreferCitrusDrinks($preferCitrusDrinks);
+
+$survey->calculateEnergyDrinkers();
+$survey->calculatePreferCitrus();
+
+echo "Total number of people surveyed " . $survey->getTotalSurveyed() . PHP_EOL;
+echo "Approximately " . $survey->getEnergyDrinkers() . " bought at least one energy drink" . PHP_EOL;
+echo $survey->getPreferCitrus() . " of those " . "prefer citrus flavored energy drinks." . PHP_EOL;
 
 
 

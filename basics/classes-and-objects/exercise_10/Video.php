@@ -1,23 +1,57 @@
 <?php
-//Assume that a Video may have the following state:
-//
-//A title;
-//a flag to say whether it is checked out or not; and
-//an average user rating.
-//In addition, Video has the following behaviour:
 
-//being checked out;
-//being returned;
-//receiving a rating.
 
 class Video
 {
-private string $title;
-private bool $flag;
-private float $averageRating;
+    private string $title;
+    private bool $flag = true;
+    private array $averageRating = [];
 
+    public function __construct(string $title)
+    {
+        $this->title = $title;
+    }
 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
 
+    public function getFlag(): string
+    {
+        if ($this->flag) {
+            return 'IS in store';
+        } else {
+            return 'IS NOT in store';
+        }
+    }
+
+    public function checkOutMovie(): void
+    {
+        $this->flag = false;
+    }
+
+    public function checkInMovie(): void
+    {
+        $this->flag = true;
+    }
+
+    public function setRating(int $rating): void
+    {
+        if ($rating < 0 || $rating > 5) return;
+        $this->averageRating[] = $rating;
+    }
+
+    public function getAverageRating(): float
+    {
+        if (count($this->averageRating) > 0) {
+            return number_format(array_sum($this->averageRating) / count($this->averageRating), 2);
+        } else {
+            return 0;
+        }
+    }
 
 }
+
+
 
