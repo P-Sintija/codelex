@@ -1,4 +1,6 @@
 <?php
+
+
 //The questions in this exercise all deal with a class Dog that you have to program from scratch.
 //
 //Create a class Dog. Dogs should have a name, and a sex.
@@ -21,6 +23,7 @@
 //If the father reference is null, return "Unknown". Test in the DogTest main method that it works.
 //referenceToCoco.FathersName() returns the string "Buster"
 //referenceToSparky.FathersName() returns the string "Unknown"
+
 //Change the dog class to include a method boolean HasSameMotherAs(Dog otherDog). The method should return true on the call
 //referenceToCoco.HasSameMotherAs(referenceToRocky). Show that the new method works in the DogTest main method.
 
@@ -45,13 +48,15 @@ class Dog
     }
 
 
-    public function setFather(?string $fathersName): void
+    public function mothersName(): string
     {
-        if ($fathersName !== null) {
-            $this->father = $fathersName;
+        if ($this->mother === null) {
+            return "Unknown";
+        } else {
+            return $this->mother;
         }
-
     }
+
 
     public function fathersName(): string
     {
@@ -62,7 +67,23 @@ class Dog
         }
     }
 
-    public function setMother(?string $mothersName): void
+
+    public function dogsParents(?string $fathersName, ?string $mothersName): void
+    {
+        $this->setFather($fathersName);
+        $this->setMother($mothersName);
+    }
+
+    public function hasSameMotherAs(Dog $otherDog): bool
+    {
+        if ($this->mothersName() === $otherDog->mothersName()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private function setMother(?string $mothersName): void
     {
         if ($mothersName !== null) {
             $this->mother = $mothersName;
@@ -70,18 +91,18 @@ class Dog
 
     }
 
-    public function mothersName(): string
+    private function setFather(?string $fathersName): void
     {
-        if ($this->mother === null) {
-            return "Unknown";
-        } else {
-            return $this->mother;
+        if ($fathersName !== null) {
+            $this->father = $fathersName;
         }
+
     }
+
 
 }
 
-class DogTest
+class DogCollection
 {
     private array $dogList = [];
 
@@ -99,54 +120,45 @@ class DogTest
         return $this->dogList;
     }
 
-
-    public function dogsParents(string $dogName, ?string $fathersName, ?string $mothersName): void
-    {
-        array_filter($this->dogList, function (Dog $dog) use ($dogName, $fathersName, $mothersName) {
-            if ($dog->getName() === $dogName) {
-                if ($fathersName !== null) {
-                    $dog->setFather($fathersName);
-                }
-                if ($mothersName !== null) {
-                    $dog->setMother($mothersName);
-                }
-            }
-        });
-    }
-
-
 }
 
 
-$allDogs = new DogTest([
-    new Dog ('Max', 'male'),
-    new Dog ('Rocky', 'male'),
-    new Dog ('Sparky', 'male'),
-    new Dog('Buster', 'male'),
-    new Dog('Sam', 'male'),
-    new Dog('Lady', 'female'),
-    new Dog('Molly', 'female'),
-    new Dog('Coco', 'female')
-]);
+$max = new Dog ('Max', 'male');
+$rocky = new Dog ('Rocky', 'male');
+$sparky = new Dog ('Sparky', 'male');
+$buster = new Dog('Buster', 'male');
+$sam = new Dog('Sam', 'male');
+$lady = new Dog('Lady', 'female');
+$molly = new Dog('Molly', 'female');
+$coco = new Dog('Coco', 'female');
 
-$allDogs->dogsParents('Max', 'Rocky', 'Lady');
-$allDogs->dogsParents('Coco', 'Buster', 'Molly');
-$allDogs->dogsParents('Rocky', 'Sam', 'Molly');
-$allDogs->dogsParents('Buster', 'Sparky', 'Lady');
-$allDogs->dogsParents('Sparky', 'Max', null);
-$allDogs->dogsParents('Sam', null, 'Coco');
+$max->dogsParents('Rocky', 'Lady');
+$coco->dogsParents('Buster', 'Molly');
+$rocky->dogsParents('Sam', 'Molly');
+$buster->dogsParents('Sparky', 'Lady');
+$sparky->dogsParents('Max', null);
+$sam->dogsParents(null, 'Coco');
 
-foreach ($allDogs->getDogs() as $dog) {
+var_dump($coco->hasSameMotherAs($rocky));
+var_dump($buster->hasSameMotherAs($sparky));
+
+$allDogs = [
+    $max,
+    $rocky,
+    $sparky,
+    $buster,
+    $sam,
+    $lady,
+    $molly,
+    $coco,
+];
+
+$dogList = new DogCollection($allDogs);
+
+foreach ($dogList->getDogs() as $dog) {
     /** @var $dog Dog */
     echo $dog->getName() . ' has ' . $dog->mothersName() . ' as mother, and ' .
         $dog->fathersName() . ' as father' . PHP_EOL;
 }
-
-
-
-
-
-
-
 
 

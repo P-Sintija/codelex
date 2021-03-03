@@ -20,7 +20,7 @@ class Element
         return $this->reward;
     }
 
-    public function __toString(): string
+    public function __toString(): string //pārkonvertē objektu par stringu
     {
         return $this->symbol();
     }

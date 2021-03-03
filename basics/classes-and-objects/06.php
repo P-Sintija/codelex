@@ -30,8 +30,8 @@ echo ? . " of those " . "prefer citrus flavored energy drinks.";
 class EnergyDrinkSurvey
 {
     private int $totalSurveyed = 0;
-    private float $purchasedEnergyDrinks;
-    private float $preferCitrusDrinks;
+    private float $purchasedEnergyDrinks = 0.0;
+    private float $preferCitrusDrinks = 0.0;
     private int $surveyedEnergyDrinkers = 0;
     private int $surveyedPreferCitrus = 0;
 
@@ -57,12 +57,18 @@ class EnergyDrinkSurvey
 
     public function calculateEnergyDrinkers(): void
     {
+        if ($this->getTotalSurveyed() <= 0 || $this->getPurchasedEnergyDrinks() < 0) {
+            throw new LogicException(";(");
+        }
         $this->surveyedEnergyDrinkers = $this->getTotalSurveyed() * $this->getPurchasedEnergyDrinks();
     }
 
 
     public function calculatePreferCitrus(): void
     {
+        if ($this->getTotalSurveyed() <= 0 || $this->getPreferCitrusDrinks() < 0) {
+            throw new LogicException(";(");
+        }
         $this->surveyedPreferCitrus = $this->getTotalSurveyed() * $this->getPreferCitrusDrinks();
     }
 
@@ -104,8 +110,13 @@ $survey->setTotalSurveyed($surveyed);
 $survey->setPurchasedEnergyDrinks($purchasedEnergyDrinks);
 $survey->setPreferCitrusDrinks($preferCitrusDrinks);
 
-$survey->calculateEnergyDrinkers();
-$survey->calculatePreferCitrus();
+try {
+    $survey->calculateEnergyDrinkers();
+    $survey->calculatePreferCitrus();
+} catch (LogicException $exception) {
+    var_dump($exception->getMessage());
+}
+
 
 echo "Total number of people surveyed " . $survey->getTotalSurveyed() . PHP_EOL;
 echo "Approximately " . $survey->getEnergyDrinkers() . " bought at least one energy drink" . PHP_EOL;

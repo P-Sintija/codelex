@@ -51,13 +51,14 @@
 class Account
 {
     public string $accountsName;
-    public float $balance;
+    public float $balance = 0;
 
     public function __construct(string $accountsName, float $balance)
     {
         $this->accountsName = $accountsName;
-        $this->balance = $balance;
+        $this->setBalance($balance);
     }
+
 
     public function __toString(): string
     {
@@ -70,8 +71,9 @@ class Account
     }
 
 
-    public function withdrawal(float $amount): void
+    public function withdraw(float $amount): void
     {
+        if ($amount > $this->balance) return;
         $this->balance = $this->balance - $amount;
     }
 
@@ -80,6 +82,11 @@ class Account
         $this->balance = $this->balance + $amount;
     }
 
+    private function setBalance(float $amount): void
+    {
+        if ($amount < 0) return;
+        $this->balance = $amount;
+    }
 }
 
 
@@ -97,15 +104,19 @@ class Bank
         array_filter($this->accounts, function (Account $account) use ($name, $deposit): void {
             if ($account->accountsName === $name) {
                 $account->deposit($deposit);
+            } else {
+                throw new InvalidArgumentException ('No such account found');
             }
         });
     }
 
-    public function withdrawalMoney(string $name, float $withdrawal): void
+    public function withdrawMoney(string $name, float $withdrawal): void
     {
         array_filter($this->accounts, function (Account $account) use ($name, $withdrawal): void {
             if ($account->accountsName === $name) {
-                $account->withdrawal($withdrawal);
+                $account->withdraw($withdrawal);
+            } else {
+                throw new InvalidArgumentException ('No such account found');
             }
         });
     }
@@ -123,7 +134,11 @@ class Bank
 
     public function transfer(Account $from, Account $to, float $howMuch): void
     {
-        $from->withdrawal($howMuch);
+        if ($from->balance < $howMuch) {
+            throw new InvalidArgumentException ('Not enough money in ' . $from . ' account');
+        }
+
+        $from->withdraw($howMuch);
         $to->deposit($howMuch);
     }
 
@@ -137,7 +152,7 @@ $bartosSwissAccount = new Account("Barto's account in Switzerland", 1000000.00);
 //echo $bartosAccount;
 //echo $bartosSwissAccount;
 
-$bartosAccount->withdrawal(20);
+$bartosAccount->withdraw(20);
 //echo "Barto's account balance is now: " . $bartosAccount->balance();
 //echo PHP_EOL;
 $bartosSwissAccount->deposit(200);
@@ -152,18 +167,23 @@ $bartosSwissAccount->deposit(200);
 $bank = new Bank;
 $firstAccount = new Account('First account', 100.0);
 $bank->addAccount($firstAccount);
-$bank->depositMoney('First account', 20.0);
-//echo $bank->printAccount('First account');
-
 
 $mattsAccount = new Account('Matt`s account', 1000);
 $myAccount = new Account('My account', 0);
 $bank->addAccount($mattsAccount);
 $bank->addAccount($myAccount);
-$bank->withdrawalMoney('Matt`s account', 100.0);
-$bank->depositMoney('My account', 100.0);
-//echo $bank->printAccount('Matt`s account');
-//echo $bank->printAccount('My account');
+
+try {
+    $bank->depositMoney('First account', 20.0);
+    $bank->withdrawMoney('Matt`s account', 100.0);
+    $bank->depositMoney('My account', 100.0);
+} catch (InvalidArgumentException $exception) {
+    var_dump($exception->getMessage());
+}
+
+echo $bank->printAccount('First account');
+echo $bank->printAccount('Matt`s account');
+echo $bank->printAccount('My account');
 
 
 $a = new Account('A', 100.0);
@@ -174,8 +194,14 @@ $bank->addAccount($a);
 $bank->addAccount($b);
 $bank->addAccount($c);
 
-$bank->transfer($a, $b, 50.0);
-$bank->transfer($b, $c, 25.0);
+try {
+    $bank->transfer($a, $b, 50.0);
+    // $bank->transfer($b, $c, 51.0);
+    $bank->transfer($b, $c, 25.0);
+} catch (InvalidArgumentException $exception) {
+    var_dump($exception->getMessage());
+}
+
 
 echo $bank->printAccount('A');
 echo $bank->printAccount('B');

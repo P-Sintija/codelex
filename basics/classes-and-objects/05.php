@@ -17,9 +17,9 @@ class Date
 
     public function __construct(int $month, int $day, int $year)
     {
-        $this->month = $month;
-        $this->day = $day;
-        $this->year = $year;
+        $this->setMonth($month);
+        $this->setDay($day);
+        $this->setYear($year);
     }
 
     public function setDay(int $input): void

@@ -2,9 +2,9 @@
 
 class Line
 {
-    private array $elements = [];
+    private  array $elements = [];
 
-    public function __construct(array $elements)
+    public function __construct(array $elements = [])
     {
         foreach ($elements as $element) {
             $this->addElement($element);
@@ -12,7 +12,7 @@ class Line
     }
 
 
-    private function addElement(Element $element): void
+    public function addElement(Element $element): void
     {
         $this->elements[] = $element;
     }
@@ -31,7 +31,7 @@ class Line
 
             $equalElements++;
         }
-        return $equalElements >= 3 ? $firstElement->reward() * $equalElements : 0;
+        return $equalElements === 5 ? $firstElement->reward() * $equalElements : 0; // 5 - lai visi 5 vienādi ne tikai 3 no sākuma
     }
 
 

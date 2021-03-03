@@ -47,19 +47,9 @@ class Movie
 
 }
 
-class MovieList
+class MovieCollection
 {
     private array $movieList;
-
-    public function __construct(array $movieList)
-    {
-        foreach ($movieList as $movie) {
-            if ($movie instanceof Movie) {
-                $this->addMovie($movie);
-            }
-        }
-    }
-
 
     public function addMovie(Movie $input): void
     {
@@ -75,13 +65,10 @@ class MovieList
 
 }
 
-$movieList = new MovieList([
-    new Movie('Casino Royale', 'Eon Productions', 'PG­13'),
-    new Movie('Glass', 'Buena Vista International', 'PG­13'),
-    new Movie('Spider-Man: Into the Spider-Verse', 'Columbia Pictures', 'PG'),
-]);
-
-var_dump($movieList);
+$movieList = new MovieCollection();
+$movieList->addMovie(new Movie('Casino Royale', 'Eon Productions', 'PG­13'));
+$movieList->addMovie(new Movie('Glass', 'Buena Vista International', 'PG­13'));
+$movieList->addMovie(new Movie('Spider-Man: Into the Spider-Verse', 'Columbia Pictures', 'PG'));
 
 foreach ($movieList->getPG('PG') as $movie) {
     echo $movie->getMovieInfo();

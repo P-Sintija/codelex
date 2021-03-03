@@ -46,17 +46,21 @@
 
 class SavingsAccount
 {
-    private int $annualInterestRate;
+    private int $annualInterestRate = 0;
     private float $balance;
-    private array $withdrawn;
-    private array $deposit;
+    private array $withdrawn = [];
+    private array $deposits = [];
     private array $interestEarned;
+    private int $period = 1;
 
     public function __construct(int $startingBalance)
     {
-        $this->balance = $startingBalance;
+        if ($startingBalance <= 0) {
+            $this->balance = 0;
+        } else {
+            $this->balance = $startingBalance;
+        }
     }
-
 
     public function getBalance(): float
     {
@@ -65,21 +69,24 @@ class SavingsAccount
 
     public function setAnnualInterestRate(int $interest): void
     {
+        if ($interest < 0) return;
         $this->annualInterestRate = $interest;
     }
 
-    public function subtractingWithdrawal(int $withdraw): void
+    public function subtractingWithdraw(int $withdraw): void
     {
-        if($withdraw > $this->balance) return;
+        if ($withdraw > $this->balance || $withdraw < 0) return;
         $this->balance = $this->balance - $withdraw;
-        $this->withdrawn [] = $withdraw;
+        $this->setAllWithdraw($withdraw);
+
     }
+
 
     public function addDeposit(int $deposit): void
     {
-        if($deposit < 0) return;
+        if ($deposit < 0) return;
         $this->balance = $this->balance + $deposit;
-        $this->deposit[] = $deposit;
+        $this->setAllDeposits($deposit);
     }
 
     public function addMonthlyInterest(): void
@@ -96,7 +103,49 @@ class SavingsAccount
         return array_sum($this->interestEarned);
     }
 
+    public function getTotalDeposit(): int
+    {
+        if (count($this->deposits) === 0) {
+            return 0;
+        } else {
+            return array_sum($this->deposits);
+        }
+
+    }
+
+    public function getTotalWithdraw(): int
+    {
+        if (count($this->withdrawn) === 0) {
+            return 0;
+        } else {
+            return array_sum($this->withdrawn);
+        }
+    }
+
+    public function setPeriod(int $time): void
+    {
+        if ($time <= 0) return;
+        $this->period = $time;
+    }
+
+    public function getPeriod(): int
+    {
+        return $this->period;
+    }
+
+
+    private function setAllDeposits(int $deposit): void
+    {
+        $this->deposits[] = $deposit;
+    }
+
+    private function setAllWithdraw(int $withdraw): void
+    {
+        $this->withdrawn [] = $withdraw;
+    }
+
 }
+
 
 $balance = readline('How much money is in the account?: ');
 $account = new SavingsAccount($balance);
@@ -106,19 +155,15 @@ $account->setAnnualInterestRate($annualInterest);
 
 $counter = 1;
 $time = readline('How long has the account been opened? ');
+$account->setPeriod($time);
 
-$totalDeposit = [];
-$totalWithdrawn = [];
-
-while ($counter <= $time) {
+while ($counter <= $account->getPeriod()) {
 
     $deposit = readline('Enter amount deposited for month: ' . $counter . ': ');
     $account->addDeposit($deposit);
-    $totalDeposit[] = $deposit;
 
     $withdrawal = readline('Enter amount withdrawn for ' . $counter . ': ');
-    $account->subtractingWithdrawal($withdrawal);
-    $totalWithdrawn[] = $withdrawal;
+    $account->subtractingWithdraw($withdrawal);
 
     $account->addMonthlyInterest();
 
@@ -126,8 +171,8 @@ while ($counter <= $time) {
 }
 
 
-echo "Total deposited: $" . number_format(array_sum($totalDeposit), 2, '.', ',') . PHP_EOL;
-echo "Total withdrawn: $" . number_format(array_sum($totalWithdrawn), 2, '.', ',') . PHP_EOL;
+echo "Total deposited: $" . number_format($account->getTotalDeposit(), 2, '.', ',') . PHP_EOL;
+echo "Total withdrawn: $" . number_format($account->getTotalWithdraw(), 2, '.', ',') . PHP_EOL;
 echo "Interest earned: $" . number_format($account->getInterestEarned(), 2, '.', ',') . PHP_EOL;
 echo "Ending balance: $" . number_format($account->getBalance(), 2, '.', ',') . PHP_EOL;
 

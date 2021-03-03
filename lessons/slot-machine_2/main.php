@@ -20,7 +20,7 @@ $machine = new SlotMachine_2([
     new Element('C', 15),
     new Element('D', 20),
     new Element('E', 25)
-],3,3);
+],5); // pielāgota 3x 3,4,5 loģikai;
 
 $machine->roll();
 
