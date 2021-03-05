@@ -41,8 +41,9 @@ class VideoStore
     public function listInventory(): string
     {
         return implode(PHP_EOL, array_map(function ($movie) {
-                return $movie->getTitle() . ' - ' . $movie->getFlag() .
-                    '; average user rating: ' . $movie->getAverageRating();
+                return $movie->getTitle() .
+                    '; average user rating: ' . $movie->getAverageRating() .
+                    '%; ' . $movie->getFlag();
             }, $this->getAllVideos())) . PHP_EOL;
     }
 

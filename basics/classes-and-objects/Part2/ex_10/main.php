@@ -45,6 +45,18 @@ require_once 'VideoStore.php';
 require_once 'Application.php';
 
 $store = new VideoStore;
+$store->addVideo(new Video('The Matrix'));
+$store->addVideo(new Video('Godfather II'));
+$store->addVideo(new Video('Star Wars Episode IV: A New Hope'));
+
+$store->takeRating('The Matrix', 90);
+$store->takeRating('The Matrix', 80);
+$store->takeRating('Star Wars Episode IV: A New Hope', 98);
+
+$store->checkOut('The Matrix');
+$store->returnVideo('The Matrix');
+$store->checkOut('Godfather II');
+
 $app = new Application($store);
 $app->run();
 

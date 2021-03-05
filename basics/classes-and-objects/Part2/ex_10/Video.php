@@ -21,9 +21,8 @@ class Video
     {
         if ($this->flag) {
             return 'IS in store';
-        } else {
-            return 'IS NOT in store';
         }
+        return 'IS NOT in store';
     }
 
     public function checkOutMovie(): void
@@ -38,7 +37,7 @@ class Video
 
     public function setRating(int $rating): void
     {
-        if ($rating < 0 || $rating > 5) return;
+        if ($rating < 0 || $rating > 100) return;
         $this->averageRating[] = $rating;
     }
 
@@ -46,9 +45,8 @@ class Video
     {
         if (count($this->averageRating) > 0) {
             return number_format(array_sum($this->averageRating) / count($this->averageRating), 2);
-        } else {
-            return 0;
         }
+        return 0;
     }
 
 }

@@ -22,48 +22,9 @@
 //with the title “Glass”, the studio “Buena Vista International” and the rating “PG­13”;
 //with the title “Spider-Man: Into the Spider-Verse”, the studio “Columbia Pictures” and the rating “PG”.
 
-class Movie
-{
-    private string $title;
-    private string $studio;
-    private string $rating;
+require_once 'Movie.php';
+require_once 'MovieCollection.php';
 
-    public function __construct(string $title, string $studio, string $rating)
-    {
-        $this->title = $title;
-        $this->studio = $studio;
-        $this->rating = $rating;
-    }
-
-    public function getMovieInfo(): string
-    {
-        return 'Movie title: ' . $this->title . '; studio: ' . $this->studio . '; rating: ' . $this->rating . PHP_EOL;
-    }
-
-    public function getMovieRating(): string
-    {
-        return $this->rating;
-    }
-
-}
-
-class MovieCollection
-{
-    private array $movieList;
-
-    public function addMovie(Movie $input): void
-    {
-        $this->movieList [] = $input;
-    }
-
-    public function getPG(string $findRating): array
-    {
-        return array_filter($this->movieList, function (Movie $movie) use ($findRating) {
-            return strpos($movie->getMovieRating(), $findRating) === 0;
-        });
-    }
-
-}
 
 $movieList = new MovieCollection();
 $movieList->addMovie(new Movie('Casino Royale', 'Eon Productions', 'PG­13'));
@@ -73,6 +34,5 @@ $movieList->addMovie(new Movie('Spider-Man: Into the Spider-Verse', 'Columbia Pi
 foreach ($movieList->getPG('PG') as $movie) {
     echo $movie->getMovieInfo();
 }
-
 
 
