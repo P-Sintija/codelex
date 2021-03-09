@@ -63,7 +63,7 @@ class FlowerShop
     }
 
 
-    public function determineFee(string $flower, $amount, $discount): int
+    public function determineFee(string $flower,int $amount,int $discount): int
     {
         if ($amount < 0) {
             $amount = 0;
