@@ -5,15 +5,7 @@ class Player
     private int $money = 0;
     private int $bet = 0;
 
-    public function money(): int
-    {
-        return $this->money;
-    }
 
-    public function bet(): int
-    {
-        return $this->bet;
-    }
 
     public function setMoney(int $amount): void
     {
@@ -26,6 +18,27 @@ class Player
         if ($bet % 10 !== 0 || $bet > $this->money || $bet < 0) return;
         $this->bet = $bet;
     }
+
+    public function getMoney(): int
+    {
+        return $this->money;
+    }
+
+    public function getBet(): int
+    {
+        return $this->bet;
+    }
+
+    public function bet(int $amount): void
+    {
+        $this->money = $this->money - $amount;
+    }
+
+    public function getWin(int $amount): void
+    {
+        $this->money = $this->money + $amount;
+    }
+
 
 }
 

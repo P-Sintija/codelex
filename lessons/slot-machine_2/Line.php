@@ -2,7 +2,7 @@
 
 class Line
 {
-    private  array $elements = [];
+    private array $elements = [];
 
     public function __construct(array $elements = [])
     {
@@ -17,7 +17,7 @@ class Line
         $this->elements[] = $element;
     }
 
-    public function getReward(): int
+    public function getReward(Player $user): int
     {
         $firstElement = null;
         $equalElements = 1;
@@ -31,9 +31,15 @@ class Line
 
             $equalElements++;
         }
-        return $equalElements === 5 ? $firstElement->reward() * $equalElements : 0; // 5 - lai visi 5 vienādi ne tikai 3 no sākuma
+
+        $this->clearLines();
+        return $equalElements >= 3 ? $firstElement->reward() * $equalElements * $user->getBet() : 0; // 5 - lai visi 5 vienādi ne tikai 3 no sākuma
     }
 
+    private function clearLines(): void
+    {
+        $this->elements = [];
+    }
 
 }
 

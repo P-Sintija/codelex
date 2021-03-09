@@ -4,6 +4,7 @@ class Element
 {
     private string $symbol;
     private int $reward;
+
     public function __construct(string $symbol, int $reward)
     {
         $this->symbol = $symbol;
@@ -15,7 +16,7 @@ class Element
         return $this->symbol;
     }
 
-    public function reward() : int
+    public function reward(): int
     {
         return $this->reward;
     }
