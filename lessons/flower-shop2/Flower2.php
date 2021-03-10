@@ -1,6 +1,5 @@
 <?php
-
-class Flower
+class Flower2 implements Sellable2
 {
     private string $name;
 
@@ -9,10 +8,15 @@ class Flower
         $this->name = $name;
     }
 
-    public function getFlowersName(): string
+    public function getName(): string
     {
         return $this->name;
     }
-}
 
+    public function id(): string
+    {
+      //  return
+    }
+
+}
 

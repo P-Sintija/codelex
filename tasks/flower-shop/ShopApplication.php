@@ -17,53 +17,62 @@ class ShopApplication
 
         $this->showPricedGoods();
 
-        $command = (int)readline('Pick a flower: ');
-        if (!isset(array_keys($this->shop->pricedGoods())[$command - 1])) {
+        $productList = $this->shop->onlyPricedProducts();
+        $command = (int)readline('Pick a product: ');
+        if ($command > count($productList) || $command <= 0) {
             echo "Sorry, I don't understand you..";
             exit;
         }
 
+        $item = $productList[$command - 1];
+
         $amount = (int)readline('Enter amount: ');
-        $flower = array_keys($this->shop->pricedGoods())[$command - 1];
-        if ($amount > $this->shop->pricedGoods()[$flower]['total']) {
-            echo 'Sorry we do not have so many ' . $flower . '!';
+        if ($amount > $item->getAmount()) {
+            echo 'Sorry we do not have so many ' . $item->getProduct()->getItemsName() . '!';
             exit;
         }
 
-        $price = $this->calculateFee($flower, $amount, $costumer);
-        echo PHP_EOL . $amount . ' ' . $flower . ' will cost you $' . number_format($price / 100, 2) . PHP_EOL;
+        $price = $this->calculateFee($item, $amount, $costumer);
+        echo PHP_EOL . $amount . ' ' . $item->getProduct()->getItemsName() . ' will cost you $' .
+            number_format($price / 100, 2) . PHP_EOL;
         echo PHP_EOL;
 
-        $this->showCorrespondingWarehouses(new Flower($flower));
-
+        $this->showCorrespondingWarehouses(new Product($item->getProduct()));
     }
 
     private function showPricedGoods(): void
     {
         echo PHP_EOL;
         $counter = 1;
-        foreach ($this->shop->pricedGoods() as $flower => $values) {
-            echo '[' . $counter++ . '] ' . $flower . ': $' .
-                number_format($values['price'] / 100, 2) .
-                '; In stock: ' . $values['total'] . PHP_EOL;
+
+        foreach ($this->shop->onlyPricedProducts() as $products) {
+            echo '[' . $counter++ . '] ' .
+                $products->getProduct()->getItemsType() . ' ' .
+                $products->getProduct()->getItemsName() . ': $' .
+                number_format($products->getPrice() / 100, 2) . '; In stock: ' .
+                $products->getAmount() .
+                PHP_EOL;
         }
-        echo PHP_EOL;
+
     }
 
-    private function calculateFee(string $flower, int $amount, FlowerShopCostumer $costumer): int
+
+    private function calculateFee(Product $item, int $amount, FlowerShopCostumer $costumer): int
     {
         $discount = 0;
         if ($costumer->getGender() === $this->shop->getDiscountRecipient()) {
             $discount = $this->shop->getDiscount();
         }
-        return $this->shop->determineFee($flower, $amount, $discount);
+        return $this->shop->determineFee($item, $amount, $discount);
     }
 
-    private function showCorrespondingWarehouses(Flower $flower): void
+
+    private function showCorrespondingWarehouses(Product $item): void
     {
-        $warehouses = $this->shop->correspondingWarehouses($flower)->getWarehouseList();
+        $warehouses = $this->shop->correspondingWarehouses($item)->getWarehouseList();
+
         foreach ($warehouses as $warehouse) {
-            echo $warehouse->getWarehouseName() . ': ' . $warehouse->getProductAmount($flower) . ' in stock' . PHP_EOL;
+            echo $warehouse->getWarehouseName() . ': ' . $warehouse->getProductAmount($item->getProduct()) . ' in stock' . PHP_EOL;
         }
     }
 

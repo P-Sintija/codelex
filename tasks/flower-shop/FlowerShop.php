@@ -3,43 +3,41 @@
 class FlowerShop
 {
     private WarehouseCollection $warehouseList;
-    private FlowerCollection $flowersInWarehouses;
-    private array $goods = [];
+    private ProductCollection $products;
     private int $discount = 0;
     private ?string $discountRecipient;
+
 
     public function setWarehouses(WarehouseCollection $warehouses): void
     {
         $this->warehouseList = $warehouses;
     }
 
-    public function setFlowerList(): void
+    public function createProductList(): void
     {
-        $this->flowersInWarehouses = new FlowerCollection();
-        foreach ($this->warehouseList->getWarehouseList() as $warehouse) {
-            foreach ($warehouse->getStockProducts()->getFlowerList() as $flower) {
-                if ($warehouse->getProductAmount($flower) > 0) {
-                    $this->flowersInWarehouses->addFlowers($flower);
-                }
+        $this->products = new ProductCollection();
+        $allItems = $this->possibleItemList();
+        $uniqueItems = $this->removeDuplicates($allItems);
+        $this->addProductsToList($uniqueItems);
+    }
+
+    public function setProductPrice(Product $product, int $price): void
+    {
+        for ($i = 0; $i < count($this->products->getAllProducts()); $i++) {
+            $item = $this->products->getAllProducts()[$i];
+            if ($item->getProduct()->getItemsName() === $product->getProduct()->getItemsName()) {
+                $item->setPrice($price);
             }
         }
-        $this->createGoodsList();
     }
 
 
-    public function setGoodsPrice(Flower $flower, int $price): void
-    {
-        if ($price > 0 && array_key_exists($flower->getFlowersName(), $this->goods)) {
-            $this->goods[$flower->getFlowersName()]['price'] = $price;
-        }
-    }
-
-    public function pricedGoods(): array
+    public function onlyPricedProducts(): array
     {
         $pricedGoods = [];
-        foreach ($this->goods as $flower => $values) {
-            if ($values['price'] > 0) {
-                $pricedGoods[$flower] = $values;
+        foreach ($this->products->getAllProducts() as $products) {
+            if ($products->getPrice() > 0) {
+                $pricedGoods[] = $products;
             }
         }
         return $pricedGoods;
@@ -62,21 +60,20 @@ class FlowerShop
         return $this->discount;
     }
 
-
-    public function determineFee(string $flower,int $amount,int $discount): int
+    public function determineFee(Product $product, int $amount, int $discount): int
     {
         if ($amount < 0) {
             $amount = 0;
         }
-        return $this->goods[$flower]['price'] * $amount * (100 - $discount) / 100;;
+        return $product->getPrice() * $amount * (100 - $discount) / 100;
     }
 
 
-    public function correspondingWarehouses(Flower $flower): WarehouseCollection
+    public function correspondingWarehouses(Product $item): WarehouseCollection
     {
         $warehouses = new WarehouseCollection;
         foreach ($this->warehouseList->getWarehouseList() as $warehouse) {
-            if (in_array($flower, $warehouse->getStockProducts()->getFlowerList())) {
+            if (in_array($item->getProduct(), $warehouse->getStockProducts()->getItemList())) {
                 $warehouses->addWarehouse($warehouse);
             }
         }
@@ -84,23 +81,46 @@ class FlowerShop
     }
 
 
-    private function createGoodsList(): void
+    private function possibleItemList(): SellableCollection
     {
-        foreach ($this->flowersInWarehouses->getFlowerList() as $flower) {
-            if (!array_key_exists($flower->getFlowersName(), $this->goods)) {
-                $this->goods[$flower->getFlowersName()] = [
-                    'price' => 0,
-                    'total' => $this->setGoodsAmount($flower)];
+        $itemsInWarehouses = new SellableCollection();
+        foreach ($this->warehouseList->getWarehouseList() as $warehouse) {
+            foreach ($warehouse->getStockProducts()->getItemList() as $item) {
+                if ($warehouse->getProductAmount($item) > 0) {
+                    $itemsInWarehouses->addItem($item);
+                }
             }
         }
+        return $itemsInWarehouses;
     }
 
-    private function setGoodsAmount(Flower $flower): int
+    private function removeDuplicates(SellableCollection $allItems): SellableCollection
+    {
+        $uniqueItems = new SellableCollection();
+        foreach ($allItems->getItemList() as $item) {
+            if (!in_array($item, $uniqueItems->getItemList())) {
+                $uniqueItems->addItem($item);
+            }
+        }
+        return $uniqueItems;
+    }
+
+    private function addProductsToList(SellableCollection $uniqueItems): ProductCollection
+    {
+        for ($i = 0; $i < count($uniqueItems->getItemList()); $i++) {
+            $product = new Product($uniqueItems->getItemList()[$i]);
+            $product->setAmount($this->addProductAmount($product));
+            $this->products->addProducts($product);
+        }
+        return $this->products;
+    }
+
+    private function addProductAmount(Product $product): int
     {
         $amount = [];
         foreach ($this->warehouseList->getWarehouseList() as $warehouse) {
-            if (in_array($flower, $warehouse->getStockProducts()->getFlowerList())) {
-                $amount[] = $warehouse->getProductAmount($flower);
+            if (in_array($product->getProduct(), $warehouse->getStockProducts()->getItemList())) {
+                $amount[] = $warehouse->getProductAmount($product->getProduct());
             }
         }
         return array_sum($amount);
