@@ -4,23 +4,22 @@ class ProductCollection2
 {
     private array $products;
 
-    public function __construct(array $products)
-    {
 
-    }
-
-    public function add (Product2 $product): void
+    public function add(Product2 $product, int $amount = 1)
     {
         $barCode = $product->barCode();
-        if(isset($this->products[$barCode])){
-            $this->products[$barCode]['amount']++;
+
+        if (isset($this->products[$barCode])) {
+            $this->products[$barCode]['amount'] += $amount;
             return;
         }
+
         $this->products[$barCode] = [
             'product' => $product,
-            'amount' => $amout
+            'amount' => $amount
         ];
-     }
+    }
+
 
 }
 

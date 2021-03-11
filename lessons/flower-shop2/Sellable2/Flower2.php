@@ -1,5 +1,9 @@
 <?php
-class Flower2 implements Sellable2
+
+require_once 'Sells.php';
+
+
+class Flower2 implements Sells
 {
     private string $name;
 
@@ -15,7 +19,7 @@ class Flower2 implements Sellable2
 
     public function id(): string
     {
-      //  return
+      return 'FLOWER_' . $this->name;
     }
 
 }

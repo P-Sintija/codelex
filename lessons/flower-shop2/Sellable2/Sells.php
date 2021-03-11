@@ -1,9 +1,8 @@
 <?php
 
-interface Sellable2
+interface Sells
 {
     public function id(): string;
-
 }
 
 

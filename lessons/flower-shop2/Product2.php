@@ -2,17 +2,17 @@
 
 class Product2
 {
-    private Sellable2 $sellable;
+    private Sells $sellable;
     private int $price;
 
 
-    public function __construct(Sellable2 $sellable, int $price)
+    public function __construct(Sells $sellable, int $price)
     {
         $this->sellable = $sellable;
         $this->price = $price;
     }
 
-    public function sellable(): Sellable2
+    public function sellable(): Sells
     {
         return $this->sellable;
     }
@@ -25,6 +25,7 @@ class Product2
     public function barCode(): string
     {
         return md5($this->sellable->id());
+      //  return $this->sellable->id();
     }
 
 }
