@@ -1,21 +1,27 @@
 <?php
+
 interface Movable
 {
-    public function getSymbol(): string;
+    public function setSymbol(string $symbol): void;
 
-    public function getPosition(): int;
+    public function setCrushAbility(int $crushAbility): void;
+
+    public function getSymbol(): string;
 
     public function move(): void;
 
-    public function setAtFinish(int $position): void;
+    public function setMileage(int $position): void;
 
-    public function setResult(int $time): void;
+    public function getMileage(): int;
 
-    public function getResult(): int;
+    public function crush(): void;
 
-    public function setStatus(bool $finished): void;
+    public function stop(): void;
 
-    public function getStatus(): bool;
+    public function setRaceFinished(): void;
 
+    public function hasCrushed(): bool;
+
+    public function raceFinished(): bool;
 }
 

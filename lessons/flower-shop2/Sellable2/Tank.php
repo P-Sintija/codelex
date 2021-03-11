@@ -1,15 +1,13 @@
 <?php
-
-require_once 'Sells.php';
-
-
-class Flower2 implements Sells
+class Tank implements Sells
 {
     private string $name;
+    private bool $isCool;
 
-    public function __construct(string $name)
+    public function __construct(string $name, bool $isCool)
     {
         $this->name = $name;
+        $this->isCool = $isCool;
     }
 
     public function name(): string
@@ -19,7 +17,6 @@ class Flower2 implements Sells
 
     public function id(): string
     {
-        return 'FLOWER_' . $this->name();
+        return 'TANK_' . $this->name();
     }
 }
-

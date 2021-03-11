@@ -1,9 +1,5 @@
 <?php
-
-require_once 'Sells.php';
-
-
-class Flower2 implements Sells
+class Plant implements Sells
 {
     private string $name;
 
@@ -19,7 +15,6 @@ class Flower2 implements Sells
 
     public function id(): string
     {
-        return 'FLOWER_' . $this->name();
+        return 'PLANT_' . $this->name();
     }
 }
-

@@ -3,77 +3,78 @@
 class RaceApp
 {
     private RaceTrack $race;
-    private Movable $opel;
-    private Movable $ww;
-    private Movable $volvo;
-    private Movable $bike;
-    private Movable $bikeDrunk;
-    private MovableCollection $participants;
+    private Layout $layout;
 
-    public function __construct(RaceTrack $race,
-                                Movable $opel,
-                                Movable $ww,
-                                Movable $volvo,
-                                Movable $bike,
-                                Movable $bikeDrunk,
-                                MovableCollection $participants
-    )
+    public function __construct(RaceTrack $race)
     {
         $this->race = $race;
-        $this->opel = $opel;
-        $this->ww = $ww;
-        $this->volvo = $volvo;
-        $this->bike = $bike;
-        $this->bikeDrunk = $bikeDrunk;
-        $this->participants = $participants;
+    }
+
+
+    public function setLayout(Layout $layout): void
+    {
+        $this->layout = $layout;
     }
 
     public function run()
     {
         $timer = 0;
+        $participants = $this->race->getParticipants();
         while (true) {
 
             $timer++;
             $this->race->finishReached($timer);
+            $this->layout->setLayout();
             $this->race->makeTracks();
-            $this->race->placeParticipants($this->participants);
+            $this->race->placeParticipants($participants);
             print("\033[H\033[J");
-            echo 'TIMER: ' . $timer;
-            echo PHP_EOL . $this->opel->getSymbol() . ' ' . $this->opel->getResult() . PHP_EOL;
-            echo $this->ww->getSymbol() . ' ' . $this->ww->getResult() . PHP_EOL;
-            echo $this->volvo->getSymbol() . ' ' . $this->volvo->getResult() . PHP_EOL;
-            echo $this->bike->getSymbol() . ' ' . $this->bike->getResult() . PHP_EOL;
-            echo $this->bikeDrunk->getSymbol() . ' ' . $this->bikeDrunk->getResult() . PHP_EOL;
-
+            echo 'TIMER: ' . $timer . ' sec' . PHP_EOL;
             $this->printTrack();
             sleep(1);
-            $this->opel->move();
-            $this->ww->move();
-            $this->volvo->move();
-            $this->bike->move();
-            $this->bikeDrunk->move();
+            $this->moveAll($participants);
 
-            if ($this->opel->getStatus() &&
-                $this->ww->getStatus() &&
-                $this->volvo->getStatus() &&
-                $this->bike->getStatus() &&
-                $this->bikeDrunk->getStatus()
-            ) {
-                $place = 1;
-                foreach ($this->race->participantsRanking() as $participant) {
-                    echo '[' . $place++ . '.place] ' . $participant->getSymbol() . ': result - ' . $participant->getResult() . PHP_EOL;
-                }
+            if ($this->raceEnded($participants) === count($participants->getMovableItems())) {
+                $this->printResults();
                 exit;
             }
-
         }
     }
+
 
     private function printTrack(): void
     {
         foreach ($this->race->getTrack() as $road) {
             echo PHP_EOL . implode('', $road) . PHP_EOL;
         }
+    }
+
+    private function moveAll(MovableCollection $participants): void
+    {
+        foreach ($participants->getMovableItems() as $participant) {
+            $participant->move();
+            $participant->crush();
+        }
+    }
+
+    private function raceEnded(MovableCollection $participants): int
+    {
+        $ended = 0;
+        foreach ($participants->getMovableItems() as $participant) {
+            if ($participant->raceFinished()) {
+                $ended++;
+            }
+        }
+        return $ended;
+    }
+
+    private function printResults(): void
+    {
+        $place = 1;
+        foreach ($this->race->getResults() as $key => $value) {
+            echo '[' . $place++ . '.place] ' . $key .
+                ': result - ' . $value . ' sec' . PHP_EOL;
+        }
+
     }
 
 }

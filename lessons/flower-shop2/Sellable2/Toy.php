@@ -14,16 +14,13 @@ class Toy implements Sells
         $this->size = $size;
     }
 
-    public function getName(): string
+    public function name(): string
     {
         return $this->name;
     }
 
-
-
     public function id(): string
     {
-        return 'TOY_' . $this->name;
+        return 'TOY_' . $this->name() . '_' . $this->size;
     }
-
 }

@@ -2,88 +2,102 @@
 
 class Car implements Movable
 {
-    private string $symbol;
+    private string $symbol = '';
     private int $speedMin = 0;
     private int $speedMax = 0;
-    private int $position = 0;
+    private int $mileage = 0;
+    private int $crushAbility = 0;
+    private bool $crushed = false;
     private bool $finished = false;
-    private int $result = 0;
 
-    public function __construct(string $symbol, int $speedMin, int $speedMax)
+    public function __construct(int $speedMin, int $speedMax, int $crushAbility)
     {
-        $this->setSymbol($symbol);
         $this->setMinSpeed($speedMin);
         $this->setMaxSpeed($speedMax);
+        $this->setCrushAbility($crushAbility);
     }
 
+    public function setSymbol(string $symbol): void
+    {
+        $this->symbol = $symbol;
+    }
+
+    public function setCrushAbility(int $crushAbility): void
+    {
+        if ($crushAbility < 0) return;
+        $this->crushAbility = $crushAbility;
+    }
 
     public function getSymbol(): string
     {
         return $this->symbol;
     }
 
-    public function setAtFinish(int $position): void
+    public function move(): void
     {
-        $this->position = $position;
+        if (!$this->finished) {
+            $this->mileage = $this->mileage + rand($this->speedMin, $this->speedMax);
+        }
     }
 
-    public function getPosition(): int
+    public function setMileage(int $position): void
     {
-        return $this->position;
+        $this->mileage = $position;
     }
 
-    public function setMinSpeed(int $speed): void
+    public function getMileage(): int
+    {
+        return $this->mileage;
+    }
+
+
+    public function crush(): void
+    {
+        if (!$this->finished) {
+            $randomNumber = rand(0, 100);
+            if ($randomNumber <= $this->crushAbility) {
+                $this->crushed = true;
+                $this->stop();
+            }
+        }
+    }
+
+    public function stop(): void
+    {
+        $this->setMinSpeed(0);
+        $this->setMaxSpeed(0);
+        $this->setRaceFinished();
+
+    }
+
+
+    public function setRaceFinished(): void
+    {
+        $this->finished = true;
+    }
+
+    public function hasCrushed(): bool
+    {
+        return $this->crushed;
+    }
+
+    public function raceFinished(): bool
+    {
+        return $this->finished;
+    }
+
+
+    private function setMinSpeed(int $speed): void
     {
         if ($speed < 0) return;
         $this->speedMin = $speed;
     }
 
-    public function setMaxSpeed(int $speed): void
+    private function setMaxSpeed(int $speed): void
     {
         if ($speed < 0) return;
         $this->speedMax = $speed;
     }
-
-    public function move(): void
-    {
-        if (!$this->finished) {
-            $this->position = $this->position + rand($this->speedMin, $this->speedMax);
-        }
-    }
-
-    public function setResult(int $time): void
-    {
-        if (!$this->finished) {
-            $this->result = $time;
-        }
-    }
-
-    public function getResult(): int
-    {
-        return $this->result;
-    }
-
-    public function setStatus(bool $finished): void
-    {
-        $this->finished = $finished;
-    }
-
-    public function getStatus(): bool
-    {
-        return $this->finished;
-    }
-
-    private function setSymbol(string $symbol): void
-    {
-        if (strlen($symbol) > 1) {
-            $this->symbol = $symbol[0];
-        } else if (strlen($symbol) === 0) {
-            $this->symbol = '?';
-        } else {
-            $this->symbol = $symbol;
-        }
-    }
-
 
 }
 
