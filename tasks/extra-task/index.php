@@ -47,14 +47,15 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
 });
 
 //// Fetch method and URI from somewhere
-$httpMethod = $_SERVER['REQUEST_METHOD'];
-$uri = $_SERVER['REQUEST_URI'];
+$httpMethod = $_SERVER['REQUEST_METHOD']; //string(3) "GET"
+$uri = $_SERVER['REQUEST_URI'];           //string(5) "/home"
+
 
 //// Strip query string (?foo=bar) and decode URI
 if (false !== $pos = strpos($uri, '?')) {
     $uri = substr($uri, 0, $pos);
 }
-$uri = rawurldecode($uri);
+$uri = rawurldecode($uri); //Returns the decoded URL, as a string.
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
@@ -66,9 +67,16 @@ switch ($routeInfo[0]) {
         // ... 405 Method Not Allowed
         break;
     case FastRoute\Dispatcher::FOUND:
+
+       // var_dump($routeInfo);
+
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
         [$class, $method] = $handler;
         call_user_func_array([new $class, $method], $vars);
+        //Calls the callback given by the first parameter with the parameters in args.
+        //$vars = array(0){} //The parameters to be passed to the callback, as an indexed array.
         break;
 }
+
+

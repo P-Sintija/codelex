@@ -10,10 +10,17 @@
 <body>
 
 <?php
-//echo $product->getName(); ?>
+
+foreach ($toys->getAllToys() as $toy) {
+    echo $toy->getName() . ' ' . $toy->getAmount() . '<br>';
+}
+?>
 
 </body>
 </html>
+
+
+
 
 
 
