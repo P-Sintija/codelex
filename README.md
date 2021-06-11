@@ -1,2 +1,2 @@
 # codelex
-homeworks
+small homeworks
